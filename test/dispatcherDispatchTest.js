@@ -3,15 +3,15 @@ var Context = require('../lib/context').Context;
 var Dispatcher = require('../lib/dispatcher').Dispatcher;
 var getNextStates = require('../lib/dispatcher').getNextStates;
 var setNextStates = require('../lib/dispatcher').setNextStates;
-var COMMANDS =  require('../lib/dispatcher').COMMANDS;
-var STATES = require('../lib/dispatcher').STATES;
-var STATUS_CODES = require('../lib/dispatcher').STATUS_CODES;
+var SMFIC =  require('../lib/dispatcher').SMFIC;
+var ST = require('../lib/dispatcher').ST;
+var SMFIS = require('../lib/dispatcher').SMFIS;
 var SMFI_VERSION = require('../lib/constants').SMFI_VERSION;
 
 var ctx;
 var dispatcher;
 
-describe('Dispatcher', function() {
+describe('Dispatcher dispatch', function() {
 	var next_states;
 
 	beforeEach(function() {
@@ -33,7 +33,7 @@ describe('Dispatcher', function() {
 			var data = new Buffer(0);
 
 			dispatcher.dispatch('Z', data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_INIT);
+				expect(ctx.state).to.equal(ST.INIT);
 				expect(err).to.equal(-1);
 				done();
 			});
@@ -44,13 +44,13 @@ describe('Dispatcher', function() {
 				callback(0);
 			};
 			dispatcher.__proto__.optionneg = function(data, callback) {
-				callback(STATUS_CODES._SMFIS_OPTIPNS);
+				callback(SMFIS._SMFIS_OPTIPNS);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_OPTNEG, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_OPTS);
+			dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
+				expect(ctx.state).to.equal(ST.OPTS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -58,13 +58,13 @@ describe('Dispatcher', function() {
 
 		it('connection info', function(done) {
 			dispatcher.__proto__.connectinfo = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_CONNECT, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_CONN);
+			dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
+				expect(ctx.state).to.equal(ST.CONN);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -72,13 +72,13 @@ describe('Dispatcher', function() {
 
 		it('helo', function(done) {
 			dispatcher.__proto__.helo = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_HELO, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_HELO);
+			dispatcher.dispatch(SMFIC.HELO, data, function(err) {
+				expect(ctx.state).to.equal(ST.HELO);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -86,13 +86,13 @@ describe('Dispatcher', function() {
 
 		it('mail from', function(done) {
 			dispatcher.__proto__.sender = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_MAIL, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_MAIL);
+			dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
+				expect(ctx.state).to.equal(ST.MAIL);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -100,13 +100,13 @@ describe('Dispatcher', function() {
 
 		it('rcpt to', function(done) {
 			dispatcher.__proto__.rcpt = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_RCPT, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_RCPT);
+			dispatcher.dispatch(SMFIC.RCPT, data, function(err) {
+				expect(ctx.state).to.equal(ST.RCPT);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -114,13 +114,13 @@ describe('Dispatcher', function() {
 
 		it('data', function(done) {
 			dispatcher.__proto__.data = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_DATA, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_DATA);
+			dispatcher.dispatch(SMFIC.DATA, data, function(err) {
+				expect(ctx.state).to.equal(ST.DATA);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -128,13 +128,13 @@ describe('Dispatcher', function() {
 
 		it('headers 1', function(done) {
 			dispatcher.__proto__.header = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_HEADER, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_HDRS);
+			dispatcher.dispatch(SMFIC.HEADER, data, function(err) {
+				expect(ctx.state).to.equal(ST.HDRS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -143,8 +143,8 @@ describe('Dispatcher', function() {
 		it('headers 2', function(done) {
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_HEADER, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_HDRS);
+			dispatcher.dispatch(SMFIC.HEADER, data, function(err) {
+				expect(ctx.state).to.equal(ST.HDRS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -152,13 +152,13 @@ describe('Dispatcher', function() {
 
 		it('end of headers', function(done) {
 			dispatcher.__proto__.eoh = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_EOH, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_EOHS);
+			dispatcher.dispatch(SMFIC.EOH, data, function(err) {
+				expect(ctx.state).to.equal(ST.EOHS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -166,13 +166,13 @@ describe('Dispatcher', function() {
 
 		it('body 1', function(done) {
 			dispatcher.__proto__.bodychunk = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_BODY, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_BODY);
+			dispatcher.dispatch(SMFIC.BODY, data, function(err) {
+				expect(ctx.state).to.equal(ST.BODY);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -181,8 +181,8 @@ describe('Dispatcher', function() {
 		it('body 2', function(done) {
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_BODY, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_BODY);
+			dispatcher.dispatch(SMFIC.BODY, data, function(err) {
+				expect(ctx.state).to.equal(ST.BODY);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -190,13 +190,13 @@ describe('Dispatcher', function() {
 
 		it('end of message', function(done) {
 			dispatcher.__proto__.bodyend = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_BODYEOB, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_ENDM);
+			dispatcher.dispatch(SMFIC.BODYEOB, data, function(err) {
+				expect(ctx.state).to.equal(ST.ENDM);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -204,13 +204,13 @@ describe('Dispatcher', function() {
 
 		it('quit', function(done) {
 			dispatcher.__proto__.quit = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_QUIT, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_QUIT);
+			dispatcher.dispatch(SMFIC.QUIT, data, function(err) {
+				expect(ctx.state).to.equal(ST.QUIT);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -229,13 +229,13 @@ describe('Dispatcher', function() {
 				callback(0);
 			};
 			dispatcher.__proto__.optionneg = function(data, callback) {
-				callback(STATUS_CODES._SMFIS_OPTIPNS);
+				callback(SMFIS._SMFIS_OPTIPNS);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_OPTNEG, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_OPTS);
+			dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
+				expect(ctx.state).to.equal(ST.OPTS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -243,13 +243,13 @@ describe('Dispatcher', function() {
 
 		it('connection info', function(done) {
 			dispatcher.__proto__.connectinfo = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_CONNECT, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_CONN);
+			dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
+				expect(ctx.state).to.equal(ST.CONN);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -257,13 +257,13 @@ describe('Dispatcher', function() {
 
 		it('helo', function(done) {
 			dispatcher.__proto__.helo = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_HELO, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_HELO);
+			dispatcher.dispatch(SMFIC.HELO, data, function(err) {
+				expect(ctx.state).to.equal(ST.HELO);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -271,13 +271,13 @@ describe('Dispatcher', function() {
 
 		it('mail from', function(done) {
 			dispatcher.__proto__.sender = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_MAIL, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_MAIL);
+			dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
+				expect(ctx.state).to.equal(ST.MAIL);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -285,13 +285,13 @@ describe('Dispatcher', function() {
 
 		it('rcpt to', function(done) {
 			dispatcher.__proto__.rcpt = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_RCPT, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_RCPT);
+			dispatcher.dispatch(SMFIC.RCPT, data, function(err) {
+				expect(ctx.state).to.equal(ST.RCPT);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -299,13 +299,13 @@ describe('Dispatcher', function() {
 
 		it('data', function(done) {
 			dispatcher.__proto__.data = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_DATA, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_DATA);
+			dispatcher.dispatch(SMFIC.DATA, data, function(err) {
+				expect(ctx.state).to.equal(ST.DATA);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -313,13 +313,13 @@ describe('Dispatcher', function() {
 
 		it('headers', function(done) {
 			dispatcher.__proto__.header = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_HEADER, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_HDRS);
+			dispatcher.dispatch(SMFIC.HEADER, data, function(err) {
+				expect(ctx.state).to.equal(ST.HDRS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -327,13 +327,13 @@ describe('Dispatcher', function() {
 
 		it('end of headers', function(done) {
 			dispatcher.__proto__.eoh = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_EOH, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_EOHS);
+			dispatcher.dispatch(SMFIC.EOH, data, function(err) {
+				expect(ctx.state).to.equal(ST.EOHS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -341,13 +341,13 @@ describe('Dispatcher', function() {
 
 		it('body', function(done) {
 			dispatcher.__proto__.bodychunk = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_BODY, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_BODY);
+			dispatcher.dispatch(SMFIC.BODY, data, function(err) {
+				expect(ctx.state).to.equal(ST.BODY);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -355,13 +355,13 @@ describe('Dispatcher', function() {
 
 		it('end of message', function(done) {
 			dispatcher.__proto__.bodyend = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_BODYEOB, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_ENDM);
+			dispatcher.dispatch(SMFIC.BODYEOB, data, function(err) {
+				expect(ctx.state).to.equal(ST.ENDM);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -369,13 +369,13 @@ describe('Dispatcher', function() {
 
 		it('quit, new connection follows', function(done) {
 			dispatcher.__proto__.quit = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_QUIT_NC, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_Q_NC);
+			dispatcher.dispatch(SMFIC.QUIT_NC, data, function(err) {
+				expect(ctx.state).to.equal(ST.Q_NC);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -394,13 +394,13 @@ describe('Dispatcher', function() {
 				callback(0);
 			};
 			dispatcher.__proto__.optionneg = function(data, callback) {
-				callback(STATUS_CODES._SMFIS_OPTIPNS);
+				callback(SMFIS._SMFIS_OPTIPNS);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_OPTNEG, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_OPTS);
+			dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
+				expect(ctx.state).to.equal(ST.OPTS);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -408,13 +408,13 @@ describe('Dispatcher', function() {
 
 		it('connection info', function(done) {
 			dispatcher.__proto__.connectinfo = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_CONNECT, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_CONN);
+			dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
+				expect(ctx.state).to.equal(ST.CONN);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -422,13 +422,13 @@ describe('Dispatcher', function() {
 
 		it('helo', function(done) {
 			dispatcher.__proto__.helo = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_HELO, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_HELO);
+			dispatcher.dispatch(SMFIC.HELO, data, function(err) {
+				expect(ctx.state).to.equal(ST.HELO);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -436,13 +436,13 @@ describe('Dispatcher', function() {
 
 		it('mail from', function(done) {
 			dispatcher.__proto__.sender = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_MAIL, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_MAIL);
+			dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
+				expect(ctx.state).to.equal(ST.MAIL);
 				expect(err).to.equal(0);
 				done();
 			});
@@ -450,13 +450,13 @@ describe('Dispatcher', function() {
 
 		it('abort', function(done) {
 			dispatcher.__proto__.abort = function(data, callback) {
-				callback(STATUS_CODES.SMFIS_CONTINUE);
+				callback(SMFIS.CONTINUE);
 			};
 
 			var data = new Buffer(0);
 
-			dispatcher.dispatch(COMMANDS.SMFIC_ABORT, data, function(err) {
-				expect(ctx.state).to.equal(STATES.ST_ABRT);
+			dispatcher.dispatch(SMFIC.ABORT, data, function(err) {
+				expect(ctx.state).to.equal(ST.ABRT);
 				expect(err).to.equal(0);
 				done();
 			});
