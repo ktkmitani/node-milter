@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var Dispatcher = require('../lib/dispatcher');
-var ST = Dispatcher.ST;
+var constants = require('../lib/constants');
+var ST = constants.ST;
 
 describe('Dispatcher functions', function() {
 	describe('trans_ok', function() {

@@ -1,12 +1,15 @@
 var expect = require('chai').expect;
 var Context = require('../lib/context').Context;
 var Dispatcher = require('../lib/dispatcher').Dispatcher;
+var constants = require('../lib/constants');
+
+var ST = constants.ST;
+var SMFIS = constants.SMFIS;
+var SMFI_VERSION = constants.SMFI_VERSION;
+
+var SMFIC =  require('../lib/dispatcher').SMFIC;
 var getNextStates = require('../lib/dispatcher').getNextStates;
 var setNextStates = require('../lib/dispatcher').setNextStates;
-var SMFIC =  require('../lib/dispatcher').SMFIC;
-var ST = require('../lib/dispatcher').ST;
-var SMFIS = require('../lib/dispatcher').SMFIS;
-var SMFI_VERSION = require('../lib/constants').SMFI_VERSION;
 
 var ctx;
 var dispatcher;
