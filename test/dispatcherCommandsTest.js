@@ -22,11 +22,12 @@ describe('Dispatcher commands', function() {
 
 	describe('abort function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.abort(data, function(status) {
+			dispatcher.abort(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.NOREPLY);
 				done();
 			});
@@ -41,8 +42,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.abort(data, function(status) {
+			dispatcher.abort(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -51,121 +53,130 @@ describe('Dispatcher commands', function() {
 
 	describe('macros function', function() {
 		it('arg error 1', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._FAIL);
 				done();
 			});
 		});
 
 		it('arg error 2', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._FAIL);
 				done();
 			});
 		});
 
 		it('connect macro', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('C'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._KEEP);
-				expect(ctx.macro.connect).to.be.length(1);
-				expect(ctx.macro.connect[0].toString()).to.equal('abc');
+				expect(ctx.mac_buf[0]).to.be.length(1);
+				expect(ctx.mac_buf[0].toString()).to.equal('abc');
 				done();
 			});
 		});
 
 		it('helo macro', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('H'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._KEEP);
-				expect(ctx.macro.helo).to.be.length(1);
-				expect(ctx.macro.helo[0].toString()).to.equal('abc');
+				expect(ctx.mac_buf[1]).to.be.length(1);
+				expect(ctx.mac_buf[1].toString()).to.equal('abc');
 				done();
 			});
 		});
 
 		it('mail macro', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('M'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._KEEP);
-				expect(ctx.macro.mail).to.be.length(1);
-				expect(ctx.macro.mail[0].toString()).to.equal('abc');
+				expect(ctx.mac_buf[2]).to.be.length(1);
+				expect(ctx.mac_buf[2].toString()).to.equal('abc');
 				done();
 			});
 		});
 
 		it('rcpt macro', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('R'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._KEEP);
-				expect(ctx.macro.rcpt).to.be.length(1);
-				expect(ctx.macro.rcpt[0].toString()).to.equal('abc');
+				expect(ctx.mac_buf[3]).to.be.length(1);
+				expect(ctx.mac_buf[3].toString()).to.equal('abc');
 				done();
 			});
 		});
 
 		it('data macro', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('T'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._KEEP);
-				expect(ctx.macro.data).to.be.length(1);
-				expect(ctx.macro.data[0].toString()).to.equal('abc');
+				expect(ctx.mac_buf[4]).to.be.length(1);
+				expect(ctx.mac_buf[4].toString()).to.equal('abc');
 				done();
 			});
 		});
 
 		it('eom macro', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('E'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._KEEP);
-				expect(ctx.macro.eom).to.be.length(1);
-				expect(ctx.macro.eom[0].toString()).to.equal('abc');
+				expect(ctx.mac_buf[5]).to.be.length(1);
+				expect(ctx.mac_buf[5].toString()).to.equal('abc');
 				done();
 			});
 		});
 
 		it('eoh macro', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('N'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.macros(data, function(status) {
+			dispatcher.macros(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._KEEP);
-				expect(ctx.macro.eoh).to.be.length(1);
-				expect(ctx.macro.eoh[0].toString()).to.equal('abc');
+				expect(ctx.mac_buf[6]).to.be.length(1);
+				expect(ctx.mac_buf[6].toString()).to.equal('abc');
 				done();
 			});
 		});
@@ -173,11 +184,12 @@ describe('Dispatcher commands', function() {
 
 	describe('bodychunk function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.bodychunk(data, function(status) {
+			dispatcher.bodychunk(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -193,8 +205,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = -1;
 
-			dispatcher.bodychunk(data, function(status) {
+			dispatcher.bodychunk(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -203,17 +216,18 @@ describe('Dispatcher commands', function() {
 
 	describe('connectinfo function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 0;
 
-			dispatcher.connectinfo(data, function(status) {
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.connectinfo(data, macro, function(status) {
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -229,8 +243,9 @@ describe('Dispatcher commands', function() {
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('hostname'), new Buffer([0])]);
+			var macro = 0;
 
-			dispatcher.connectinfo(data, function(status) {
+			dispatcher.connectinfo(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -247,8 +262,9 @@ describe('Dispatcher commands', function() {
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('hostname'), new Buffer([0])]);
 			data = Buffer.concat([data, new Buffer('4'), new Buffer([0x27, 0x29])]);
+			var macro = 0;
 
-			dispatcher.connectinfo(data, function(status) {
+			dispatcher.connectinfo(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -266,8 +282,9 @@ describe('Dispatcher commands', function() {
 			data = Buffer.concat([data, new Buffer('hostname'), new Buffer([0])]);
 			data = Buffer.concat([data, new Buffer('4'), new Buffer([0x27, 0x29])]);
 			data = Buffer.concat([data, new Buffer('addr')]);
+			var macro = 0;
 
-			dispatcher.connectinfo(data, function(status) {
+			dispatcher.connectinfo(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -288,14 +305,15 @@ describe('Dispatcher commands', function() {
 			data = Buffer.concat([data, new Buffer('hostname'), new Buffer([0])]);
 			data = Buffer.concat([data, new Buffer('4'), new Buffer([0x27, 0x29])]);
 			data = Buffer.concat([data, new Buffer('addr'), new Buffer([0])]);
+			var macro = 0;
 
-			dispatcher.connectinfo(data, function(status) {
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.connectinfo(data, macro, function(status) {
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -304,11 +322,12 @@ describe('Dispatcher commands', function() {
 
 	describe('bodyend function', function() {
 		it('unset both function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 5;
 
-			dispatcher.bodyend(data, function(status) {
+			dispatcher.bodyend(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -323,8 +342,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 5;
 
-			dispatcher.bodyend(data, function(status) {
+			dispatcher.bodyend(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -340,8 +360,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = 5;
 
-			dispatcher.bodyend(data, function(status) {
+			dispatcher.bodyend(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -360,8 +381,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = 5;
 
-			dispatcher.bodyend(data, function(status) {
+			dispatcher.bodyend(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -370,16 +392,17 @@ describe('Dispatcher commands', function() {
 
 	describe('helo function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 1;
 
-			dispatcher.helo(data, function(status) {
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.helo(data, macro, function(status) {
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -396,13 +419,14 @@ describe('Dispatcher commands', function() {
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
 			data = Buffer.concat([data, new Buffer([0])]);
+			var macro = 1;
 
-			dispatcher.helo(data, function(status) {
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.helo(data, macro, function(status) {
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -418,13 +442,14 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 1;
 
-			dispatcher.helo(data, function(status) {
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.helo(data, macro, function(status) {
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS._FAIL);
 				done();
 			});
@@ -440,13 +465,14 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = 1;
 
-			dispatcher.helo(data, function(status) {
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.helo(data, macro, function(status) {
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS._FAIL);
 				done();
 			});
@@ -455,11 +481,12 @@ describe('Dispatcher commands', function() {
 
 	describe('header function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.header(data, function(status) {
+			dispatcher.header(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -478,8 +505,9 @@ describe('Dispatcher commands', function() {
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('field'), new Buffer([0])]);
 			data = Buffer.concat([data, new Buffer('value'), new Buffer([0])]);
+			var macro = -1;
 
-			dispatcher.header(data, function(status) {
+			dispatcher.header(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -496,8 +524,9 @@ describe('Dispatcher commands', function() {
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('field')]);
 			data = Buffer.concat([data, new Buffer('value')]);
+			var macro = -1;
 
-			dispatcher.header(data, function(status) {
+			dispatcher.header(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -506,15 +535,16 @@ describe('Dispatcher commands', function() {
 
 	describe('sender function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 2;
 
-			dispatcher.sender(data, function(status) {
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.sender(data, macro, function(status) {
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -531,12 +561,13 @@ describe('Dispatcher commands', function() {
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('abc'), new Buffer([0])]);
+			var macro = 2;
 
-			dispatcher.sender(data, function(status) {
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.sender(data, macro, function(status) {
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -552,12 +583,13 @@ describe('Dispatcher commands', function() {
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('abc')]);
+			var macro = 2;
 
-			dispatcher.sender(data, function(status) {
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.sender(data, macro, function(status) {
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -571,15 +603,16 @@ describe('Dispatcher commands', function() {
 			});
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.optionneg(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(ctx.prot_vers).to.equal(6);
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
@@ -593,15 +626,16 @@ describe('Dispatcher commands', function() {
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(12);
 			data.writeUInt32BE(1);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.optionneg(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(ctx.prot_vers).to.equal(6);
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
@@ -620,15 +654,16 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(7);
 			data.writeUInt32BE(0x0000003F, 4);
 			data.writeUInt32BE(0x1000007F, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.optionneg(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(ctx.prot_vers).to.equal(6);
 				expect(ctx.mta_prot_vers).to.equal(7);
 				expect(ctx.prot_vers2mta).to.equal(6);
@@ -656,15 +691,16 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(6);
 			data.writeUInt32BE(0x0000003F, 4);
 			data.writeUInt32BE(0x0000007F, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.optionneg(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(ctx.prot_vers).to.equal(6);
 				expect(ctx.mta_prot_vers).to.equal(6);
 				expect(ctx.prot_vers2mta).to.equal(6);
@@ -696,15 +732,16 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(6);
 			data.writeUInt32BE(0x0000003F, 4);
 			data.writeUInt32BE(0x2000047F, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.optionneg(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(ctx.prot_vers).to.equal(6);
 				expect(ctx.mta_prot_vers).to.equal(6);
 				expect(ctx.prot_vers2mta).to.equal(6);
@@ -732,8 +769,9 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(6);
 			data.writeUInt32BE(0x0000003F, 4);
 			data.writeUInt32BE(0x2000047F, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
+			dispatcher.optionneg(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -758,15 +796,16 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(6);
 			data.writeUInt32BE(0, 4);
 			data.writeUInt32BE(0x2000007F, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.optionneg(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(ctx.prot_vers).to.equal(6);
 				expect(ctx.mta_prot_vers).to.equal(6);
 				expect(ctx.prot_vers2mta).to.equal(6);
@@ -798,15 +837,16 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(6);
 			data.writeUInt32BE(0x0000003F, 4);
 			data.writeUInt32BE(0, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.optionneg(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(ctx.prot_vers).to.equal(6);
 				expect(ctx.mta_prot_vers).to.equal(6);
 				expect(ctx.prot_vers2mta).to.equal(6);
@@ -837,8 +877,9 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(6);
 			data.writeUInt32BE(0x0000003F, 4);
 			data.writeUInt32BE(0x2000047F, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
+			dispatcher.optionneg(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -862,8 +903,9 @@ describe('Dispatcher commands', function() {
 			data.writeUInt32BE(6);
 			data.writeUInt32BE(0x0000003F, 4);
 			data.writeUInt32BE(0x2000047F, 8);
+			var macro = -1;
 
-			dispatcher.optionneg(data, function(status) {
+			dispatcher.optionneg(data, macro, function(status) {
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -872,11 +914,12 @@ describe('Dispatcher commands', function() {
 
 	describe('eoh function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 6;
 
-			dispatcher.eoh(data, function(status) {
+			dispatcher.eoh(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -891,8 +934,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = 6;
 
-			dispatcher.eoh(data, function(status) {
+			dispatcher.eoh(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -901,18 +945,19 @@ describe('Dispatcher commands', function() {
 
 	describe('quit function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.quit(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.quit(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS._NOREPLY);
 				done();
 			});
@@ -927,15 +972,16 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = -1;
 
-			dispatcher.quit(data, function(status) {
-				expect(ctx.macro.connect).to.equal(null);
-				expect(ctx.macro.helo).to.equal(null);
-				expect(ctx.macro.mail).to.equal(null);
-				expect(ctx.macro.rcpt).to.equal(null);
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.quit(data, macro, function(status) {
+				expect(ctx.mac_buf[0]).to.equal(null);
+				expect(ctx.mac_buf[1]).to.equal(null);
+				expect(ctx.mac_buf[2]).to.equal(null);
+				expect(ctx.mac_buf[3]).to.equal(null);
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS._NOREPLY);
 				done();
 			});
@@ -944,11 +990,12 @@ describe('Dispatcher commands', function() {
 
 	describe('data function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 4;
 
-			dispatcher.data(data, function(status) {
+			dispatcher.data(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -963,8 +1010,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = 4;
 
-			dispatcher.data(data, function(status) {
+			dispatcher.data(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -973,14 +1021,15 @@ describe('Dispatcher commands', function() {
 
 	describe('rcpt function', function() {
 		it('unset function', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = 3;
 
-			dispatcher.rcpt(data, function(status) {
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.rcpt(data, macro, function(status) {
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -997,11 +1046,12 @@ describe('Dispatcher commands', function() {
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('abc'), new Buffer([0])]);
+			var macro = 3;
 
-			dispatcher.rcpt(data, function(status) {
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.rcpt(data, macro, function(status) {
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -1017,11 +1067,12 @@ describe('Dispatcher commands', function() {
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
 			data = Buffer.concat([data, new Buffer('abc')]);
+			var macro = 3;
 
-			dispatcher.rcpt(data, function(status) {
-				expect(ctx.macro.data).to.equal(null);
-				expect(ctx.macro.eom).to.equal(null);
-				expect(ctx.macro.eoh).to.equal(null);
+			dispatcher.rcpt(data, macro, function(status) {
+				expect(ctx.mac_buf[4]).to.equal(null);
+				expect(ctx.mac_buf[5]).to.equal(null);
+				expect(ctx.mac_buf[6]).to.equal(null);
 				expect(status).to.equal(SMFIS._ABORT);
 				done();
 			});
@@ -1035,8 +1086,9 @@ describe('Dispatcher commands', function() {
 			});
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.unknown(data, function(status) {
+			dispatcher.unknown(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});
@@ -1053,8 +1105,9 @@ describe('Dispatcher commands', function() {
 
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer('abc');
+			var macro = -1;
 
-			dispatcher.unknown(data, function(status) {
+			dispatcher.unknown(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
 				done();
 			});
@@ -1066,8 +1119,9 @@ describe('Dispatcher commands', function() {
 			});
 			var dispatcher = new Dispatcher(ctx);
 			var data = new Buffer(0);
+			var macro = -1;
 
-			dispatcher.unknown(data, function(status) {
+			dispatcher.unknown(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.CONTINUE);
 				done();
 			});

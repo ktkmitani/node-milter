@@ -27,7 +27,7 @@ describe('Dispatcher dispatch', function() {
 
 	describe('dispatch 1', function() {
 		it('unknown command', function(done) {
-			ctx = new Context({});
+			ctx = new Context();
 			ctx.socket = {
 				end: function() {}
 			};
@@ -46,7 +46,7 @@ describe('Dispatcher dispatch', function() {
 			dispatcher.__proto__.sendreply = function(status, ctx, callback) {
 				callback(0);
 			};
-			dispatcher.__proto__.optionneg = function(data, callback) {
+			dispatcher.__proto__.optionneg = function(data, macro, callback) {
 				callback(SMFIS._SMFIS_OPTIPNS);
 			};
 
@@ -60,7 +60,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('connection info', function(done) {
-			dispatcher.__proto__.connectinfo = function(data, callback) {
+			dispatcher.__proto__.connectinfo = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -74,7 +74,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('helo', function(done) {
-			dispatcher.__proto__.helo = function(data, callback) {
+			dispatcher.__proto__.helo = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -88,7 +88,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('mail from', function(done) {
-			dispatcher.__proto__.sender = function(data, callback) {
+			dispatcher.__proto__.sender = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -102,7 +102,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('rcpt to', function(done) {
-			dispatcher.__proto__.rcpt = function(data, callback) {
+			dispatcher.__proto__.rcpt = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -116,7 +116,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('data', function(done) {
-			dispatcher.__proto__.data = function(data, callback) {
+			dispatcher.__proto__.data = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -130,7 +130,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('headers 1', function(done) {
-			dispatcher.__proto__.header = function(data, callback) {
+			dispatcher.__proto__.header = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -154,7 +154,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('end of headers', function(done) {
-			dispatcher.__proto__.eoh = function(data, callback) {
+			dispatcher.__proto__.eoh = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -168,7 +168,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('body 1', function(done) {
-			dispatcher.__proto__.bodychunk = function(data, callback) {
+			dispatcher.__proto__.bodychunk = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -192,7 +192,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('end of message', function(done) {
-			dispatcher.__proto__.bodyend = function(data, callback) {
+			dispatcher.__proto__.bodyend = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -206,7 +206,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('quit', function(done) {
-			dispatcher.__proto__.quit = function(data, callback) {
+			dispatcher.__proto__.quit = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -222,7 +222,7 @@ describe('Dispatcher dispatch', function() {
 
 	describe('dispatch 2', function() {
 		it('option negotiation', function(done) {
-			ctx = new Context({});
+			ctx = new Context();
 			ctx.socket = {
 				end: function() {}
 			};
@@ -231,7 +231,7 @@ describe('Dispatcher dispatch', function() {
 			dispatcher.__proto__.sendreply = function(status, ctx, callback) {
 				callback(0);
 			};
-			dispatcher.__proto__.optionneg = function(data, callback) {
+			dispatcher.__proto__.optionneg = function(data, macro, callback) {
 				callback(SMFIS._SMFIS_OPTIPNS);
 			};
 
@@ -245,7 +245,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('connection info', function(done) {
-			dispatcher.__proto__.connectinfo = function(data, callback) {
+			dispatcher.__proto__.connectinfo = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -259,7 +259,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('helo', function(done) {
-			dispatcher.__proto__.helo = function(data, callback) {
+			dispatcher.__proto__.helo = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -273,7 +273,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('mail from', function(done) {
-			dispatcher.__proto__.sender = function(data, callback) {
+			dispatcher.__proto__.sender = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -287,7 +287,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('rcpt to', function(done) {
-			dispatcher.__proto__.rcpt = function(data, callback) {
+			dispatcher.__proto__.rcpt = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -301,7 +301,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('data', function(done) {
-			dispatcher.__proto__.data = function(data, callback) {
+			dispatcher.__proto__.data = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -315,7 +315,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('headers', function(done) {
-			dispatcher.__proto__.header = function(data, callback) {
+			dispatcher.__proto__.header = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -329,7 +329,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('end of headers', function(done) {
-			dispatcher.__proto__.eoh = function(data, callback) {
+			dispatcher.__proto__.eoh = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -343,7 +343,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('body', function(done) {
-			dispatcher.__proto__.bodychunk = function(data, callback) {
+			dispatcher.__proto__.bodychunk = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -357,7 +357,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('end of message', function(done) {
-			dispatcher.__proto__.bodyend = function(data, callback) {
+			dispatcher.__proto__.bodyend = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -371,7 +371,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('quit, new connection follows', function(done) {
-			dispatcher.__proto__.quit = function(data, callback) {
+			dispatcher.__proto__.quit = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -387,7 +387,7 @@ describe('Dispatcher dispatch', function() {
 
 	describe('dispatch 3', function() {
 		it('option negotiation', function(done) {
-			ctx = new Context({});
+			ctx = new Context();
 			ctx.socket = {
 				end: function() {}
 			};
@@ -396,7 +396,7 @@ describe('Dispatcher dispatch', function() {
 			dispatcher.__proto__.sendreply = function(status, ctx, callback) {
 				callback(0);
 			};
-			dispatcher.__proto__.optionneg = function(data, callback) {
+			dispatcher.__proto__.optionneg = function(data, macro, callback) {
 				callback(SMFIS._SMFIS_OPTIPNS);
 			};
 
@@ -410,7 +410,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('connection info', function(done) {
-			dispatcher.__proto__.connectinfo = function(data, callback) {
+			dispatcher.__proto__.connectinfo = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -424,7 +424,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('helo', function(done) {
-			dispatcher.__proto__.helo = function(data, callback) {
+			dispatcher.__proto__.helo = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -438,7 +438,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('mail from', function(done) {
-			dispatcher.__proto__.sender = function(data, callback) {
+			dispatcher.__proto__.sender = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 
@@ -452,7 +452,7 @@ describe('Dispatcher dispatch', function() {
 		});
 
 		it('abort', function(done) {
-			dispatcher.__proto__.abort = function(data, callback) {
+			dispatcher.__proto__.abort = function(data, macro, callback) {
 				callback(SMFIS.CONTINUE);
 			};
 

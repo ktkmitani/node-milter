@@ -16,7 +16,7 @@ describe('Dispatcher', function() {
 	});
 
 	it('construnctor', function() {
-		var ctx = new Context({});
+		var ctx = new Context();
 		var dispatcher1 = new Dispatcher(ctx);
 		expect(dispatcher1).to.be.an.instanceof(Dispatcher);
 
@@ -26,7 +26,7 @@ describe('Dispatcher', function() {
 
 	describe('execute', function() {
 		it('one chunk', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
 			dispatcher.__proto__.dispatch = function(cmd, buf, callback) {
@@ -46,7 +46,7 @@ describe('Dispatcher', function() {
 		});
 
 		it('two chunk', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
 			dispatcher.__proto__.dispatch = function(cmd, buf, callback) {
@@ -68,7 +68,7 @@ describe('Dispatcher', function() {
 		});
 
 		it('two command', function(done) {
-			var ctx = new Context({});
+			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
 			dispatcher.__proto__.dispatch = function(cmd, buf, callback) {
@@ -95,7 +95,7 @@ describe('Dispatcher', function() {
 
 		it('too big data', function(done) {
 			var socketend = false;
-			var ctx = new Context({});
+			var ctx = new Context();
 			ctx.socket = {
 				end: function() {
 					socketend = true;
