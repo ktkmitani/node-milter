@@ -6,6 +6,7 @@ var MAX_MACROS_ENTRIES = constants.MAX_MACROS_ENTRIES;
 var ST = constants.ST;
 var SMFIR = constants.SMFIR;
 var SMFIF = constants.SMFIF;
+var SMFIM = constants.SMFIM;
 
 var nodemilter = require('../lib/milter');
 var Milter = nodemilter.Milter;
@@ -242,6 +243,60 @@ describe('milter', function() {
 
 		it('setmlreply error 5', function() {
 			var res = milter.setmlreply(ctx, '400', '3.0.0', 'test', 'test2');
+			expect(res).to.equal(-1);
+		});
+	});
+
+	describe('setsymlist', function() {
+		var ctx, milter;
+		beforeEach(function() {
+			ctx = {};
+			ctx.mac_list = new Array(MAX_MACROS_ENTRIES);
+			milter = nodemilter.createMilter();
+		});
+
+		it('success', function() {
+			var macros = ['i', 'j'];
+			var res = milter.setsymlist(ctx, SMFIM.CONNECT, macros);
+			expect(res).to.equal(0);
+			expect(ctx.mac_list[0][0]).to.equal('i');
+			expect(ctx.mac_list[0][1]).to.equal('j');
+		});
+
+		it('error 1', function() {
+			var macros = ['i', 'j'];
+			var res = milter.setsymlist(null, SMFIM.CONNECT, macros);
+			expect(res).to.equal(-1);
+		});
+
+		it('error 2', function() {
+			var macros = ['i', 'j'];
+			var res = milter.setsymlist(ctx, SMFIM.CONNECT, null);
+			expect(res).to.equal(-1);
+		});
+
+		it('error 3', function() {
+			var macros = ['i', 'j'];
+			var res = milter.setsymlist(ctx, SMFIM.CONNECT, 1);
+			expect(res).to.equal(-1);
+		});
+
+		it('error 4', function() {
+			var macros = [1, 2];
+			var res = milter.setsymlist(ctx, SMFIM.CONNECT, macros);
+			expect(res).to.equal(-1);
+		});
+
+		it('error 5', function() {
+			var macros = ['i', 'j'];
+			var res = milter.setsymlist(ctx, SMFIM.CONNECT, macros);
+			res = milter.setsymlist(ctx, SMFIM.CONNECT, macros);
+			expect(res).to.equal(-1);
+		});
+
+		it('error 6', function() {
+			var macros = ['i', 'j'];
+			var res = milter.setsymlist(ctx, 7, macros);
 			expect(res).to.equal(-1);
 		});
 	});

@@ -43,3 +43,11 @@ module.exports.SMFIP_NR_EOH = require('./lib/constants').SMFIP.NR_EOH;
 module.exports.SMFIP_NR_BODY = require('./lib/constants').SMFIP.NR_BODY;
 module.exports.SMFIP_NR_HDR = require('./lib/constants').SMFIP.NR_HDR;
 module.exports.SMFIP_HDR_LEADSPC = require('./lib/constants').SMFIP.HDR_LEADSPC;
+
+module.exports.SMFIM_CONNECT = require('./lib/constants').SMFIM.CONNECT;
+module.exports.SMFIM_HELO = require('./lib/constants').SMFIM.HELO;
+module.exports.SMFIM_ENVFROM = require('./lib/constants').SMFIM.ENVFROM;
+module.exports.SMFIM_ENVRCPT = require('./lib/constants').SMFIM.ENVRCPT;
+module.exports.SMFIM_DATA = require('./lib/constants').SMFIM.DATA;
+module.exports.SMFIM_EOM = require('./lib/constants').SMFIM.EOM;
+module.exports.SMFIM_EOH = require('./lib/constants').SMFIM.EOH;
