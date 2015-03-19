@@ -1,4 +1,6 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
+
 var Context = require('../lib/context').Context;
 var Dispatcher = require('../lib/dispatcher').Dispatcher;
 var constants = require('../lib/constants');
@@ -177,6 +179,19 @@ describe('Dispatcher commands', function() {
 				expect(status).to.equal(SMFIS._KEEP);
 				expect(ctx.mac_buf[6]).to.be.length(1);
 				expect(ctx.mac_buf[6].toString()).to.equal('abc');
+				done();
+			});
+		});
+
+		it('unknown macro', function(done) {
+			var ctx = new Context();
+			var dispatcher = new Dispatcher(ctx);
+			var data = new Buffer(0);
+			data = Buffer.concat([data, new Buffer('Z'), new Buffer('abc'), new Buffer([0])]);
+			var macro = -1;
+
+			dispatcher.macros(data, macro, function(status) {
+				expect(status).to.equal(SMFIS._FAIL);
 				done();
 			});
 		});
@@ -368,7 +383,7 @@ describe('Dispatcher commands', function() {
 			});
 		});
 
-		it('set function', function(done) {
+		it('set both function', function(done) {
 			var ctx = new Context({
 				body: function(ctx, data, callback) {
 					expect(data.toString()).to.equal('abc');
@@ -385,6 +400,49 @@ describe('Dispatcher commands', function() {
 
 			dispatcher.bodyend(data, macro, function(status) {
 				expect(status).to.equal(SMFIS.REJECT);
+				done();
+			});
+		});
+
+		it('fi_body reject 1', function(done) {
+			var ctx = new Context({
+				body: function(ctx, data, callback) {
+					callback(SMFIS.REJECT);
+				},
+				eom: function(ctx, callback) {
+					callback(SMFIS.REJECT);
+				}
+			});
+
+			var dispatcher = new Dispatcher(ctx);
+			var data = new Buffer('abc');
+			var macro = 5;
+
+			var stub = sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0);
+
+			dispatcher.bodyend(data, macro, function(status) {
+				expect(status).to.equal(SMFIS.REJECT);
+				stub.restore();
+				done();
+			});
+		});
+
+		it('fi_body reject 2', function(done) {
+			var ctx = new Context({
+				body: function(ctx, data, callback) {
+					callback(SMFIS.REJECT);
+				}
+			});
+
+			var dispatcher = new Dispatcher(ctx);
+			var data = new Buffer('abc');
+			var macro = 5;
+
+			var stub = sinon.stub(dispatcher, 'sendreply').callsArgWith(1, -1);
+
+			dispatcher.bodyend(data, macro, function(status) {
+				expect(status).to.equal(SMFIS._ABORT);
+				stub.restore();
 				done();
 			});
 		});

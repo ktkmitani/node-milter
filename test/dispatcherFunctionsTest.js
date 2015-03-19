@@ -4,7 +4,7 @@ var constants = require('../lib/constants');
 var ST = constants.ST;
 
 describe('Dispatcher functions', function() {
-	describe('trans_ok', function() {
+	it('trans_ok', function() {
 		[
 			{name: 'INIT -> INIT', p1: ST.INIT, p2: ST.INIT, res: false},
 			{name: 'INIT -> OPTS', p1: ST.INIT, p2: ST.OPTS, res: true},
@@ -278,10 +278,8 @@ describe('Dispatcher functions', function() {
 			{name: 'SKIP -> Q_NC', p1: ST.SKIP, p2: ST.Q_NC, res: false},
 			{name: 'SKIP -> SKIP', p1: ST.SKIP, p2: ST.SKIP, res: false},
 		].forEach(function(test) {
-			it(test.name, function() {
-				var result = Dispatcher._trans_ok(test.p1, test.p2);
-				expect(result).to.equal(test.res);
-			});
+			var result = Dispatcher._trans_ok(test.p1, test.p2);
+			expect(result).to.equal(test.res);
 		});
 	});
 
