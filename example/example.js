@@ -1,4 +1,4 @@
-var nodemilter = require('./index');
+var nodemilter = require('../index');
 
 var flags = 0
 	| nodemilter.SMFIF_ADDHDRS
@@ -21,7 +21,6 @@ milter.setCallback('negotiate', function(ctx, f1, f2, f3, f4, callback) {
 });
 
 milter.setCallback('connect', function(ctx, hostname, address, port, callback) {
-	console.log(ctx.mac_buf);
 	console.log('connect [%s][%s][%d]', hostname, address, port);
 	callback(nodemilter.SMFIS_CONTINUE);
 });
