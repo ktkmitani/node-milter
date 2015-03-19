@@ -318,7 +318,7 @@ describe('milter', function() {
 			stub.callsArgWith(2, 0);
 			milter.insheader(ctx, 1, 'f', 'v', function(result) {
 				expect(result).to.equal(0);
-				expect(stub.firstCall.args[0]).to.equal(SMFIR.INSHEADE);
+				expect(stub.firstCall.args[0]).to.equal(SMFIR.INSHEADER);
 				expect(stub.firstCall.args[1].readUInt32BE()).to.equal(1);
 				expect(stub.firstCall.args[1].toString('ascii', 4)).to.equal('f\u0000v\u0000');
 				done();
@@ -522,7 +522,7 @@ describe('milter', function() {
 			milter.replacebody(ctx, 'body', function(result) {
 				expect(result).to.equal(0);
 				expect(stub.firstCall.args[0]).to.equal(SMFIR.REPLBODY);
-				expect(stub.firstCall.args[1]).to.equal('body');
+				expect(stub.firstCall.args[1].toString()).to.equal('body');
 				done();
 			});
 		});
@@ -531,10 +531,10 @@ describe('milter', function() {
 			ctx.aflags = SMFIF.CHGBODY;
 			ctx.state = ST.ENDM;
 			stub.callsArgWith(2, 0);
-			milter.replacebody(ctx, new Buffer('body\u0000'), function(result) {
+			milter.replacebody(ctx, new Buffer('body'), function(result) {
 				expect(result).to.equal(0);
 				expect(stub.firstCall.args[0]).to.equal(SMFIR.REPLBODY);
-				expect(stub.firstCall.args[1].toString()).to.equal('body\u0000');
+				expect(stub.firstCall.args[1].toString()).to.equal('body');
 				done();
 			});
 		});

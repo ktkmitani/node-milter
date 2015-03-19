@@ -1,4 +1,5 @@
 var nodemilter = require('../index');
+var async = require('async');
 
 var flags = 0
 	| nodemilter.SMFIF_ADDHDRS
@@ -62,7 +63,117 @@ milter.setCallback('body', function(ctx, data, callback) {
 
 milter.setCallback('eom', function(ctx, callback) {
 	console.log('eom');
-	callback(nodemilter.SMFIS_CONTINUE);
+
+	async.waterfall([
+		function(callback) {
+			milter.addheader(ctx, 'X-foo', 'foo', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('addheader error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.insheader(ctx, 0, 'X-boo', 'boo', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('insheader error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.chgheader(ctx, 'X-boo2', 0, 'boo2', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('chgheader error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.chgfrom(ctx, 'ktk.mitani@gmail.com', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('chgfrom error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.addrcpt(ctx, 'ktk.mitani@gmail.com', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('addrcpt error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.addrcpt_par(ctx, 'ktk.mitani2@gmail.com', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('addrcpt_par error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.delrcpt(ctx, 'ktk.mitani@gmail.com', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('delrcpt error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.replacebody(ctx, 'replace body', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('replacebody error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.progress(ctx,  function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('progress error');
+					return;
+				}
+
+				callback();
+			});
+		},
+		function(callback) {
+			milter.quarantine(ctx,  'test', function(result) {
+				if (result !== nodemilter.MI_SUCCESS) {
+					callback('quarantine error');
+					return;
+				}
+
+				callback();
+			});
+		}
+	], function(err) {
+		if (err) {
+			console.log(err);
+			callback(nodemilter.SMFIS_TEMPFAIL);
+			return;
+		}
+
+		callback(nodemilter.SMFIS_CONTINUE);
+	});
 });
 
 milter.setCallback('abort', function(ctx, callback) {
