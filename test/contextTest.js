@@ -22,7 +22,7 @@ describe('Context', function() {
 		};
 		var ctx = new Context(milter, socket);
 
-		ctx.write_command('c', function(result) {
+		ctx._write_command('c', function(result) {
 			done();
 		});
 	});
@@ -45,7 +45,7 @@ describe('Context', function() {
 
 		var data = new Buffer([0x61, 0x62, 0x63, 0x00]);
 
-		ctx.write_command('O', data, function(result) {
+		ctx._write_command('O', data, function(result) {
 			done();
 		});
 	});
@@ -62,7 +62,7 @@ describe('Context', function() {
 		};
 		var ctx = new Context(milter, socket);
 
-		ctx.write_command('O', null, function(result) {
+		ctx._write_command('O', null, function(result) {
 			done();
 		});
 	});
@@ -74,7 +74,7 @@ describe('Context', function() {
 
 		var data = new Buffer(1024 * 1024);
 
-		ctx.write_command('O', data, function(result) {
+		ctx._write_command('O', data, function(result) {
 			expect(result).to.equal(-1);
 			done();
 		});
@@ -96,7 +96,7 @@ describe('Context', function() {
 		};
 		var ctx = new Context(milter, socket);
 
-		ctx.write_command('y', 'abc', function(result) {
+		ctx._write_command('y', 'abc', function(result) {
 			done();
 		});
 	});
@@ -105,7 +105,7 @@ describe('Context', function() {
 		var milter = {};
 		var ctx = new Context(milter, null);
 
-		ctx.write_command('c', function(result) {
+		ctx._write_command('c', function(result) {
 			expect(result).to.equal(-1);
 			done();
 		});

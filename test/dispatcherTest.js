@@ -38,7 +38,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(dispatcher, 'dispatch',function(cmd, buf, callback) {
+			var stub = sinon.stub(dispatcher, '_dispatch',function(cmd, buf, callback) {
 				expect(cmd).to.equal('O');
 				expect(buf.toString()).to.equal('abc');
 				callback();
@@ -49,7 +49,7 @@ describe('Dispatcher', function() {
 			data = Buffer.concat([data, new Buffer('O')]);
 			data = Buffer.concat([data, new Buffer('abc')]);
 
-			dispatcher.execute(data, function() {
+			dispatcher._execute(data, function() {
 				stub.restore();
 				done();
 			});
@@ -59,7 +59,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(dispatcher, 'dispatch',function(cmd, buf, callback) {
+			var stub = sinon.stub(dispatcher, '_dispatch',function(cmd, buf, callback) {
 				expect(cmd).to.equal('O');
 				expect(buf.toString()).to.equal('abc');
 				callback();
@@ -69,9 +69,9 @@ describe('Dispatcher', function() {
 			data.writeUInt32BE(4);
 			data = Buffer.concat([data, new Buffer('O')]);
 
-			dispatcher.execute(data, function() {
+			dispatcher._execute(data, function() {
 				var data = new Buffer('abc');
-				dispatcher.execute(data, function() {
+				dispatcher._execute(data, function() {
 					stub.restore();
 					done();
 				});
@@ -82,7 +82,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(dispatcher, 'dispatch',function(cmd, buf, callback) {
+			var stub = sinon.stub(dispatcher, '_dispatch',function(cmd, buf, callback) {
 				expect(cmd).to.equal('O');
 				expect(buf.toString()).to.equal('abc');
 				callback();
@@ -99,7 +99,7 @@ describe('Dispatcher', function() {
 			data = Buffer.concat([data, new Buffer('O')]);
 			data = Buffer.concat([data, new Buffer('abc')]);
 
-			dispatcher.execute(data, function(err) {
+			dispatcher._execute(data, function(err) {
 				stub.restore();
 				done();
 			});
@@ -108,7 +108,7 @@ describe('Dispatcher', function() {
 		it('too big data', function(done) {
 			var socketend = false;
 			var ctx = new Context();
-			ctx.socket = {
+			ctx._socket = {
 				end: function() {
 					socketend = true;
 				}
@@ -120,7 +120,7 @@ describe('Dispatcher', function() {
 			data = Buffer.concat([data, new Buffer('O')]);
 			data = Buffer.concat([data, new Buffer('abc')]);
 
-			dispatcher.execute(data, function() {
+			dispatcher._execute(data, function() {
 				expect(socketend).to.equal(true);
 				done();
 			});
@@ -132,13 +132,13 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.CONTINUE);
 				callback = data;
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.CONTINUE, function(result) {
+			dispatcher._sendreply(SMFIS.CONTINUE, function(result) {
 				stub.restore();
 				done();
 			});
@@ -148,13 +148,13 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.TEMPFAIL);
 				callback = data;
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.TEMPFAIL, function(result) {
+			dispatcher._sendreply(SMFIS.TEMPFAIL, function(result) {
 				stub.restore();
 				done();
 			});
@@ -162,15 +162,15 @@ describe('Dispatcher', function() {
 
 		it('TEMPFAIL 2', function(done) {
 			var ctx = new Context();
-			ctx.reply = new Buffer('4');
+			ctx._reply = new Buffer('4');
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.REPLYCODE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.TEMPFAIL, function(result) {
+			dispatcher._sendreply(SMFIS.TEMPFAIL, function(result) {
 				stub.restore();
 				done();
 			});
@@ -180,13 +180,13 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.REJECT);
 				callback = data;
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.REJECT, function(result) {
+			dispatcher._sendreply(SMFIS.REJECT, function(result) {
 				stub.restore();
 				done();
 			});
@@ -194,15 +194,15 @@ describe('Dispatcher', function() {
 
 		it('REJECT 2', function(done) {
 			var ctx = new Context();
-			ctx.reply = new Buffer('5');
+			ctx._reply = new Buffer('5');
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.REPLYCODE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.REJECT, function(result) {
+			dispatcher._sendreply(SMFIS.REJECT, function(result) {
 				stub.restore();
 				done();
 			});
@@ -212,13 +212,13 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.DISCARD);
 				callback = data;
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.DISCARD, function(result) {
+			dispatcher._sendreply(SMFIS.DISCARD, function(result) {
 				stub.restore();
 				done();
 			});
@@ -228,13 +228,13 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.ACCEPT);
 				callback = data;
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.ACCEPT, function(result) {
+			dispatcher._sendreply(SMFIS.ACCEPT, function(result) {
 				stub.restore();
 				done();
 			});
@@ -244,13 +244,13 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIR.SKIP);
 				callback = data;
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.SKIP, function(result) {
+			dispatcher._sendreply(SMFIS.SKIP, function(result) {
 				stub.restore();
 				done();
 			});
@@ -260,14 +260,14 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			ctx.mac_list[0] = 'abc';
+			ctx._mac_list[0] = 'abc';
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.OPTNEG);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS._OPTIONS, function(result) {
+			dispatcher._sendreply(SMFIS._OPTIONS, function(result) {
 				stub.restore();
 				done();
 			});
@@ -275,17 +275,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 1', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.CONN;
-			ctx.pflags = SMFIP.NR_CONN;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.CONN;
+			ctx._pflags = SMFIP.NR_CONN;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -293,17 +293,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 2', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.HELO;
-			ctx.pflags = SMFIP.NR_HELO;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.HELO;
+			ctx._pflags = SMFIP.NR_HELO;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -311,17 +311,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 3', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.MAIL;
-			ctx.pflags = SMFIP.NR_MAIL;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.MAIL;
+			ctx._pflags = SMFIP.NR_MAIL;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -329,17 +329,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 4', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.RCPT;
-			ctx.pflags = SMFIP.NR_RCPT;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.RCPT;
+			ctx._pflags = SMFIP.NR_RCPT;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -347,17 +347,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 5', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.DATA;
-			ctx.pflags = SMFIP.NR_DATA;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.DATA;
+			ctx._pflags = SMFIP.NR_DATA;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -365,17 +365,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 6', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.UNKN;
-			ctx.pflags = SMFIP.NR_UNKN;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.UNKN;
+			ctx._pflags = SMFIP.NR_UNKN;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -383,17 +383,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 7', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.HDRS;
-			ctx.pflags = SMFIP.NR_HDR;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.HDRS;
+			ctx._pflags = SMFIP.NR_HDR;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -401,17 +401,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 8', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.EOHS;
-			ctx.pflags = SMFIP.NR_EOH;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.EOHS;
+			ctx._pflags = SMFIP.NR_EOH;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				stub.restore();
 				done();
 			});
@@ -419,17 +419,17 @@ describe('Dispatcher', function() {
 
 		it('NOREPLY 9', function(done) {
 			var ctx = new Context();
-			ctx.state = ST.BODY;
-			ctx.pflags = SMFIP.NR_BODY;
-			ctx.mta_pflags  = 0;
+			ctx._state = ST.BODY;
+			ctx._pflags = SMFIP.NR_BODY;
+			ctx._mta_pflags  = 0;
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(ctx, 'write_command', function(cmd, data, callback) {
+			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
 				expect(cmd).to.equal(SMFIC.CONTINUE);
 				callback(0);
 			});
 
-			dispatcher.sendreply(SMFIS.CONTINUE, function(result) {
+			dispatcher._sendreply(SMFIS.CONTINUE, function(result) {
 				stub.restore();
 				done();
 			});
@@ -439,7 +439,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			dispatcher.sendreply(SMFIS.NOREPLY, function(result) {
+			dispatcher._sendreply(SMFIS.NOREPLY, function(result) {
 				expect(result).to.equal(0);
 				done();
 			});
@@ -449,7 +449,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			dispatcher.sendreply(SMFIS._NONE, function(result) {
+			dispatcher._sendreply(SMFIS._NONE, function(result) {
 				expect(result).to.equal(0);
 				done();
 			});

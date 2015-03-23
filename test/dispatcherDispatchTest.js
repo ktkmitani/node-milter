@@ -28,7 +28,7 @@ describe('Dispatcher dispatch', function() {
 	it('dispatch 1', function(done) {
 		var socketend = false;
 		var ctx = new Context();
-		ctx.socket = {
+		ctx._socket = {
 			end: function() {
 				socketend = true;
 			}
@@ -36,116 +36,116 @@ describe('Dispatcher dispatch', function() {
 
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'helo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'sender').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'rcpt').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'data').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'header').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'eoh').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodychunk').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodyend').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'quit').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_helo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sender').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_rcpt').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_data').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_header').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_eoh').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodychunk').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodyend').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_quit').callsArgWith(2, SMFIS.CONTINUE));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch('Z', data, function(err) {
-					expect(ctx.state).to.equal(ST.INIT);
+				dispatcher._dispatch('Z', data, function(err) {
+					expect(ctx._state).to.equal(ST.INIT);
 					expect(err).to.equal(-1);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HELO, data, function(err) {
-					expect(ctx.state).to.equal(ST.HELO);
+				dispatcher._dispatch(SMFIC.HELO, data, function(err) {
+					expect(ctx._state).to.equal(ST.HELO);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
-					expect(ctx.state).to.equal(ST.MAIL);
+				dispatcher._dispatch(SMFIC.MAIL, data, function(err) {
+					expect(ctx._state).to.equal(ST.MAIL);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.RCPT, data, function(err) {
-					expect(ctx.state).to.equal(ST.RCPT);
+				dispatcher._dispatch(SMFIC.RCPT, data, function(err) {
+					expect(ctx._state).to.equal(ST.RCPT);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.DATA, data, function(err) {
-					expect(ctx.state).to.equal(ST.DATA);
+				dispatcher._dispatch(SMFIC.DATA, data, function(err) {
+					expect(ctx._state).to.equal(ST.DATA);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HEADER, data, function(err) {
-					expect(ctx.state).to.equal(ST.HDRS);
+				dispatcher._dispatch(SMFIC.HEADER, data, function(err) {
+					expect(ctx._state).to.equal(ST.HDRS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HEADER, data, function(err) {
-					expect(ctx.state).to.equal(ST.HDRS);
+				dispatcher._dispatch(SMFIC.HEADER, data, function(err) {
+					expect(ctx._state).to.equal(ST.HDRS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.EOH, data, function(err) {
-					expect(ctx.state).to.equal(ST.EOHS);
+				dispatcher._dispatch(SMFIC.EOH, data, function(err) {
+					expect(ctx._state).to.equal(ST.EOHS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.BODY, data, function(err) {
-					expect(ctx.state).to.equal(ST.BODY);
+				dispatcher._dispatch(SMFIC.BODY, data, function(err) {
+					expect(ctx._state).to.equal(ST.BODY);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.BODY, data, function(err) {
-					expect(ctx.state).to.equal(ST.BODY);
+				dispatcher._dispatch(SMFIC.BODY, data, function(err) {
+					expect(ctx._state).to.equal(ST.BODY);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.BODYEOB, data, function(err) {
-					expect(ctx.state).to.equal(ST.ENDM);
+				dispatcher._dispatch(SMFIC.BODYEOB, data, function(err) {
+					expect(ctx._state).to.equal(ST.ENDM);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.QUIT, data, function(err) {
-					expect(ctx.state).to.equal(ST.QUIT);
+				dispatcher._dispatch(SMFIC.QUIT, data, function(err) {
+					expect(ctx._state).to.equal(ST.QUIT);
 					expect(err).to.equal(0);
 					done();
 				});
@@ -164,7 +164,7 @@ describe('Dispatcher dispatch', function() {
 	it('dispatch 2', function(done) {
 		var socketend = false;
 		var ctx = new Context();
-		ctx.socket = {
+		ctx._socket = {
 			end: function() {
 				socketend = true;
 			}
@@ -172,95 +172,95 @@ describe('Dispatcher dispatch', function() {
 
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'helo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'sender').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'rcpt').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'data').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'header').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'eoh').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodychunk').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodyend').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'quit').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_helo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sender').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_rcpt').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_data').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_header').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_eoh').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodychunk').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodyend').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_quit').callsArgWith(2, SMFIS.CONTINUE));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HELO, data, function(err) {
-					expect(ctx.state).to.equal(ST.HELO);
+				dispatcher._dispatch(SMFIC.HELO, data, function(err) {
+					expect(ctx._state).to.equal(ST.HELO);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
-					expect(ctx.state).to.equal(ST.MAIL);
+				dispatcher._dispatch(SMFIC.MAIL, data, function(err) {
+					expect(ctx._state).to.equal(ST.MAIL);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.RCPT, data, function(err) {
-					expect(ctx.state).to.equal(ST.RCPT);
+				dispatcher._dispatch(SMFIC.RCPT, data, function(err) {
+					expect(ctx._state).to.equal(ST.RCPT);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.DATA, data, function(err) {
-					expect(ctx.state).to.equal(ST.DATA);
+				dispatcher._dispatch(SMFIC.DATA, data, function(err) {
+					expect(ctx._state).to.equal(ST.DATA);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HEADER, data, function(err) {
-					expect(ctx.state).to.equal(ST.HDRS);
+				dispatcher._dispatch(SMFIC.HEADER, data, function(err) {
+					expect(ctx._state).to.equal(ST.HDRS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.EOH, data, function(err) {
-					expect(ctx.state).to.equal(ST.EOHS);
+				dispatcher._dispatch(SMFIC.EOH, data, function(err) {
+					expect(ctx._state).to.equal(ST.EOHS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.BODY, data, function(err) {
-					expect(ctx.state).to.equal(ST.BODY);
+				dispatcher._dispatch(SMFIC.BODY, data, function(err) {
+					expect(ctx._state).to.equal(ST.BODY);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.BODYEOB, data, function(err) {
-					expect(ctx.state).to.equal(ST.ENDM);
+				dispatcher._dispatch(SMFIC.BODYEOB, data, function(err) {
+					expect(ctx._state).to.equal(ST.ENDM);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.QUIT_NC, data, function(err) {
-					expect(ctx.state).to.equal(ST.Q_NC);
+				dispatcher._dispatch(SMFIC.QUIT_NC, data, function(err) {
+					expect(ctx._state).to.equal(ST.Q_NC);
 					expect(err).to.equal(0);
 					done();
 				});
@@ -279,7 +279,7 @@ describe('Dispatcher dispatch', function() {
 	it('dispatch 3', function(done) {
 		var socketend = false;
 		var ctx = new Context();
-		ctx.socket = {
+		ctx._socket = {
 			end: function() {
 				socketend = true;
 			}
@@ -287,53 +287,53 @@ describe('Dispatcher dispatch', function() {
 
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'helo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'sender').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'rcpt').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'data').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'header').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'eoh').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodychunk').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodyend').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'quit').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_helo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sender').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_rcpt').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_data').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_header').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_eoh').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodychunk').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodyend').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_quit').callsArgWith(2, SMFIS.CONTINUE));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HELO, data, function(err) {
-					expect(ctx.state).to.equal(ST.HELO);
+				dispatcher._dispatch(SMFIC.HELO, data, function(err) {
+					expect(ctx._state).to.equal(ST.HELO);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
-					expect(ctx.state).to.equal(ST.MAIL);
+				dispatcher._dispatch(SMFIC.MAIL, data, function(err) {
+					expect(ctx._state).to.equal(ST.MAIL);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.ABORT, data, function(err) {
-					expect(ctx.state).to.equal(ST.ABRT);
+				dispatcher._dispatch(SMFIC.ABORT, data, function(err) {
+					expect(ctx._state).to.equal(ST.ABRT);
 					expect(err).to.equal(0);
 					done();
 				});
@@ -353,66 +353,66 @@ describe('Dispatcher dispatch', function() {
 		var socketend = false;
 		var abortcall = false;
 		var ctx = new Context();
-		ctx.socket = {
+		ctx._socket = {
 			end: function() {
 				socketend = true;
 			}
 		};
-		ctx.milter = {
-			abort: function() {
+		ctx._milter = {
+			_abort: function() {
 				abortcall = true;
 			}
 		};
 
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'helo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'sender').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'rcpt').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'data').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'header').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'eoh').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodychunk').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'bodyend').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'quit').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_helo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sender').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_rcpt').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_data').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_header').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_eoh').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodychunk').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_bodyend').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_quit').callsArgWith(2, SMFIS.CONTINUE));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HELO, data, function(err) {
-					expect(ctx.state).to.equal(ST.HELO);
+				dispatcher._dispatch(SMFIC.HELO, data, function(err) {
+					expect(ctx._state).to.equal(ST.HELO);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
-					expect(ctx.state).to.equal(ST.MAIL);
+				dispatcher._dispatch(SMFIC.MAIL, data, function(err) {
+					expect(ctx._state).to.equal(ST.MAIL);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.MAIL);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.MAIL);
 					expect(err).to.equal(1);
 					done();
 				});
@@ -433,14 +433,14 @@ describe('Dispatcher dispatch', function() {
 		var ctx = new Context();
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, -1));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, -1));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
 					expect(err).to.equal(-1);
 					done();
 				});
@@ -458,23 +458,23 @@ describe('Dispatcher dispatch', function() {
 		var ctx = new Context();
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.ACCEPT));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.ACCEPT));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
@@ -492,23 +492,23 @@ describe('Dispatcher dispatch', function() {
 		var ctx = new Context();
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.REJECT));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.REJECT));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
@@ -526,23 +526,23 @@ describe('Dispatcher dispatch', function() {
 		var ctx = new Context();
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.DISCARD));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.DISCARD));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
@@ -560,23 +560,23 @@ describe('Dispatcher dispatch', function() {
 		var ctx = new Context();
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.TEMPFAIL));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.TEMPFAIL));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
@@ -594,49 +594,49 @@ describe('Dispatcher dispatch', function() {
 		var abortcall = false;
 		var closecall = false;
 		var ctx = new Context();
-		ctx.milter = {
-			abort: function() {
+		ctx._milter = {
+			_abort: function() {
 				abortcall = true;
 			},
-			close: function() {
+			_close: function() {
 				closecall = true;
 			}
 		};
 		var dispatcher = new Dispatcher(ctx);
 		var stubs = [];
-		stubs.push(sinon.stub(dispatcher, 'sendreply').callsArgWith(1, 0));
-		stubs.push(sinon.stub(dispatcher, 'optionneg').callsArgWith(2, SMFIS._OPTIONS));
-		stubs.push(sinon.stub(dispatcher, 'connectinfo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'helo').callsArgWith(2, SMFIS.CONTINUE));
-		stubs.push(sinon.stub(dispatcher, 'sender').callsArgWith(2, SMFIS._ABORT));
+		stubs.push(sinon.stub(dispatcher, '_sendreply').callsArgWith(1, 0));
+		stubs.push(sinon.stub(dispatcher, '_optionneg').callsArgWith(2, SMFIS._OPTIONS));
+		stubs.push(sinon.stub(dispatcher, '_connectinfo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_helo').callsArgWith(2, SMFIS.CONTINUE));
+		stubs.push(sinon.stub(dispatcher, '_sender').callsArgWith(2, SMFIS._ABORT));
 
 		var data = new Buffer(0);
 
 		async.waterfall([
 			function(done) {
-				dispatcher.dispatch(SMFIC.OPTNEG, data, function(err) {
-					expect(ctx.state).to.equal(ST.OPTS);
+				dispatcher._dispatch(SMFIC.OPTNEG, data, function(err) {
+					expect(ctx._state).to.equal(ST.OPTS);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.CONNECT, data, function(err) {
-					expect(ctx.state).to.equal(ST.CONN);
+				dispatcher._dispatch(SMFIC.CONNECT, data, function(err) {
+					expect(ctx._state).to.equal(ST.CONN);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.HELO, data, function(err) {
-					expect(ctx.state).to.equal(ST.HELO);
+				dispatcher._dispatch(SMFIC.HELO, data, function(err) {
+					expect(ctx._state).to.equal(ST.HELO);
 					expect(err).to.equal(0);
 					done();
 				});
 			},
 			function(done) {
-				dispatcher.dispatch(SMFIC.MAIL, data, function(err) {
-					expect(ctx.state).to.equal(ST.MAIL);
+				dispatcher._dispatch(SMFIC.MAIL, data, function(err) {
+					expect(ctx._state).to.equal(ST.MAIL);
 					expect(err).to.equal(-1);
 					done();
 				});

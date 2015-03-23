@@ -31,62 +31,62 @@ describe('milter', function() {
 
 		it('connect', function() {
 			milter.setCallback('connect', function() {});
-			expect(milter.connect).to.not.equal(undefined);
+			expect(milter._connect).to.not.equal(undefined);
 		});
 
 		it('helo', function() {
 			milter.setCallback('helo', function() {});
-			expect(milter.helo).to.not.equal(undefined);
+			expect(milter._helo).to.not.equal(undefined);
 		});
 
 		it('envfrom', function() {
 			milter.setCallback('envfrom', function() {});
-			expect(milter.envfrom).to.not.equal(undefined);
+			expect(milter._envfrom).to.not.equal(undefined);
 		});
 
 		it('envrcpt', function() {
 			milter.setCallback('envrcpt', function() {});
-			expect(milter.envrcpt).to.not.equal(undefined);
+			expect(milter._envrcpt).to.not.equal(undefined);
 		});
 
 		it('header', function() {
 			milter.setCallback('header', function() {});
-			expect(milter.header).to.not.equal(undefined);
+			expect(milter._header).to.not.equal(undefined);
 		});
 
 		it('eoh', function() {
 			milter.setCallback('eoh', function() {});
-			expect(milter.eoh).to.not.equal(undefined);
+			expect(milter._eoh).to.not.equal(undefined);
 		});
 
 		it('body', function() {
 			milter.setCallback('body', function() {});
-			expect(milter.body).to.not.equal(undefined);
+			expect(milter._body).to.not.equal(undefined);
 		});
 
 		it('eom', function() {
 			milter.setCallback('eom', function() {});
-			expect(milter.eom).to.not.equal(undefined);
+			expect(milter._eom).to.not.equal(undefined);
 		});
 
 		it('abort', function() {
 			milter.setCallback('abort', function() {});
-			expect(milter.abort).to.not.equal(undefined);
+			expect(milter._abort).to.not.equal(undefined);
 		});
 
 		it('unknown', function() {
 			milter.setCallback('unknown', function() {});
-			expect(milter.unknown).to.not.equal(undefined);
+			expect(milter._unknown).to.not.equal(undefined);
 		});
 
 		it('data', function() {
 			milter.setCallback('data', function() {});
-			expect(milter.data).to.not.equal(undefined);
+			expect(milter._data).to.not.equal(undefined);
 		});
 
 		it('negotiate', function() {
 			milter.setCallback('negotiate', function() {});
-			expect(milter.negotiate).to.not.equal(undefined);
+			expect(milter._negotiate).to.not.equal(undefined);
 		});
 
 		it('hoge', function() {
@@ -150,22 +150,22 @@ describe('milter', function() {
 		});
 
 		it('success 1', function() {
-			ctx.mac_buf = new Array(MAX_MACROS_ENTRIES);
-			ctx.mac_buf[5] = ['i', 'value'];
+			ctx._mac_buf = new Array(MAX_MACROS_ENTRIES);
+			ctx._mac_buf[5] = ['i', 'value'];
 
 			expect(milter.getsymval(ctx, 'i')).to.equal('value');
 		});
 
 		it('success 2', function() {
-			ctx.mac_buf = new Array(MAX_MACROS_ENTRIES);
-			ctx.mac_buf[5] = ['{i}', 'value'];
+			ctx._mac_buf = new Array(MAX_MACROS_ENTRIES);
+			ctx._mac_buf[5] = ['{i}', 'value'];
 
 			expect(milter.getsymval(ctx, 'i')).to.equal('value');
 		});
 
 		it('success 3', function() {
-			ctx.mac_buf = new Array(MAX_MACROS_ENTRIES);
-			ctx.mac_buf[5] = ['i', 'value'];
+			ctx._mac_buf = new Array(MAX_MACROS_ENTRIES);
+			ctx._mac_buf[5] = ['i', 'value'];
 
 			expect(milter.getsymval(ctx, '{i}')).to.equal('value');
 		});
@@ -189,31 +189,31 @@ describe('milter', function() {
 		it('setreply success', function() {
 			var res = milter.setreply(ctx, '400', '4.0.0', 'test');
 			expect(res).to.equal(0);
-			expect(ctx.reply.toString()).to.equal('400 4.0.0 test\r\n\u0000');
+			expect(ctx._reply.toString()).to.equal('400 4.0.0 test\r\n\u0000');
 		});
 
 		it('setmlreply success 1', function() {
 			var res = milter.setmlreply(ctx, '400', '4.0.0', 'test');
 			expect(res).to.equal(0);
-			expect(ctx.reply.toString()).to.equal('400 4.0.0 test\r\n\u0000');
+			expect(ctx._reply.toString()).to.equal('400 4.0.0 test\r\n\u0000');
 		});
 
 		it('setmlreply success 2', function() {
 			var res = milter.setmlreply(ctx, '400', '4.0.0', 'test', 'test2');
 			expect(res).to.equal(0);
-			expect(ctx.reply.toString()).to.equal('400-4.0.0 test\r\n400 4.0.0 test2\r\n\u0000');
+			expect(ctx._reply.toString()).to.equal('400-4.0.0 test\r\n400 4.0.0 test2\r\n\u0000');
 		});
 
 		it('setmlreply success 3', function() {
 			var res = milter.setmlreply(ctx, '400', null, 'test');
 			expect(res).to.equal(0);
-			expect(ctx.reply.toString()).to.equal('400 4.0.0 test\r\n\u0000');
+			expect(ctx._reply.toString()).to.equal('400 4.0.0 test\r\n\u0000');
 		});
 
 		it('setmlreply success 4', function() {
 			var res = milter.setmlreply(ctx, '500', null, 'test');
 			expect(res).to.equal(0);
-			expect(ctx.reply.toString()).to.equal('500 5.0.0 test\r\n\u0000');
+			expect(ctx._reply.toString()).to.equal('500 5.0.0 test\r\n\u0000');
 		});
 
 		it('setreply error', function() {
@@ -251,7 +251,7 @@ describe('milter', function() {
 		var ctx, milter;
 		beforeEach(function() {
 			ctx = {};
-			ctx.mac_list = new Array(MAX_MACROS_ENTRIES);
+			ctx._mac_list = new Array(MAX_MACROS_ENTRIES);
 			milter = nodemilter.createMilter();
 		});
 
@@ -259,8 +259,8 @@ describe('milter', function() {
 			var macros = ['i', 'j'];
 			var res = milter.setsymlist(ctx, SMFIM.CONNECT, macros);
 			expect(res).to.equal(0);
-			expect(ctx.mac_list[0][0]).to.equal('i');
-			expect(ctx.mac_list[0][1]).to.equal('j');
+			expect(ctx._mac_list[0][0]).to.equal('i');
+			expect(ctx._mac_list[0][1]).to.equal('j');
 		});
 
 		it('error 1', function() {
@@ -305,10 +305,10 @@ describe('milter', function() {
 		var ctx, milter, stub;
 		beforeEach(function() {
 			ctx = {};
-			ctx.write_command = function(){};
-			ctx.milter = {};
+			ctx._write_command = function(){};
+			ctx._milter = {};
 			milter = nodemilter.createMilter();
-			stub = sinon.stub(ctx, 'write_command');
+			stub = sinon.stub(ctx, '_write_command');
 		});
 
 		afterEach(function() {
@@ -316,8 +316,8 @@ describe('milter', function() {
 		});
 
 		it('addheader 1', function(done) {
-			ctx.aflags = SMFIF.ADDHDRS;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDHDRS;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addheader(ctx, 'f', 'v', function(result) {
 				expect(result).to.equal(0);
@@ -328,8 +328,8 @@ describe('milter', function() {
 		});
 
 		it('addheader 2', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			milter.addheader(ctx, 'f', 'v', function(result) {
 				expect(result).to.equal(-1);
 				done();
@@ -337,8 +337,8 @@ describe('milter', function() {
 		});
 
 		it('chgheader 1', function(done) {
-			ctx.aflags = SMFIF.CHGHDRS;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGHDRS;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.chgheader(ctx, 'f', 1, 'v', function(result) {
 				expect(result).to.equal(0);
@@ -350,8 +350,8 @@ describe('milter', function() {
 		});
 
 		it('chgheader 2', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			milter.chgheader(ctx, 'f', 1, 'v', function(result) {
 				expect(result).to.equal(-1);
 				done();
@@ -359,8 +359,8 @@ describe('milter', function() {
 		});
 
 		it('chgheader 3', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			milter.chgheader(ctx, 'f', -1, 'v', function(result) {
 				expect(result).to.equal(-1);
 				done();
@@ -368,8 +368,8 @@ describe('milter', function() {
 		});
 
 		it('insheader 1', function(done) {
-			ctx.aflags = SMFIF.ADDHDRS;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDHDRS;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.insheader(ctx, 1, 'f', 'v', function(result) {
 				expect(result).to.equal(0);
@@ -381,8 +381,8 @@ describe('milter', function() {
 		});
 
 		it('insheader 2', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			milter.insheader(ctx, 1, 'f', 'v', function(result) {
 				expect(result).to.equal(-1);
 				done();
@@ -390,8 +390,8 @@ describe('milter', function() {
 		});
 
 		it('insheader 3', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			milter.insheader(ctx, -1, 'f', 'v', function(result) {
 				expect(result).to.equal(-1);
 				done();
@@ -399,8 +399,8 @@ describe('milter', function() {
 		});
 
 		it('chgfrom 1', function(done) {
-			ctx.aflags = SMFIF.CHGFROM;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGFROM;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.chgfrom(ctx, 'from', function(result) {
 				expect(result).to.equal(0);
@@ -411,8 +411,8 @@ describe('milter', function() {
 		});
 
 		it('chgfrom 2', function(done) {
-			ctx.aflags = SMFIF.CHGFROM;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGFROM;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.chgfrom(ctx, 'from', 'args', function(result) {
 				expect(result).to.equal(0);
@@ -423,8 +423,8 @@ describe('milter', function() {
 		});
 
 		it('chgfrom 3', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.chgfrom(ctx, 'from', 'args', function(result) {
 				expect(result).to.equal(-1);
@@ -433,8 +433,8 @@ describe('milter', function() {
 		});
 
 		it('chgfrom 4', function(done) {
-			ctx.aflags = SMFIF.CHGFROM;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGFROM;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.chgfrom(ctx, null, 'args', function(result) {
 				expect(result).to.equal(-1);
@@ -443,8 +443,8 @@ describe('milter', function() {
 		});
 
 		it('chgfrom 5', function(done) {
-			ctx.aflags = SMFIF.CHGFROM;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGFROM;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.chgfrom(ctx, 1, 'args', function(result) {
 				expect(result).to.equal(-1);
@@ -453,8 +453,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt 1', function(done) {
-			ctx.aflags = SMFIF.ADDRCPT;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDRCPT;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt(ctx, 'rcpt', function(result) {
 				expect(result).to.equal(0);
@@ -465,8 +465,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt 2', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt(ctx, 'rcpt', function(result) {
 				expect(result).to.equal(-1);
@@ -475,8 +475,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt 3', function(done) {
-			ctx.aflags = SMFIF.ADDRCPT;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDRCPT;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt(ctx, 1, function(result) {
 				expect(result).to.equal(-1);
@@ -485,8 +485,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt_par 1', function(done) {
-			ctx.aflags = SMFIF.ADDRCPT_PAR;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDRCPT_PAR;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt_par(ctx, 'rcpt', function(result) {
 				expect(result).to.equal(0);
@@ -497,8 +497,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt_par 2', function(done) {
-			ctx.aflags = SMFIF.ADDRCPT_PAR;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDRCPT_PAR;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt_par(ctx, 'rcpt', 'args', function(result) {
 				expect(result).to.equal(0);
@@ -509,8 +509,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt_par 3', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt_par(ctx, 'rcpt', 'args', function(result) {
 				expect(result).to.equal(-1);
@@ -519,8 +519,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt_par 4', function(done) {
-			ctx.aflags = SMFIF.ADDRCPT_PAR;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDRCPT_PAR;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt_par(ctx, null, 'args', function(result) {
 				expect(result).to.equal(-1);
@@ -529,8 +529,8 @@ describe('milter', function() {
 		});
 
 		it('addrcpt_par 5', function(done) {
-			ctx.aflags = SMFIF.ADDRCPT_PAR;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.ADDRCPT_PAR;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.addrcpt_par(ctx, 1, 'args', function(result) {
 				expect(result).to.equal(-1);
@@ -539,8 +539,8 @@ describe('milter', function() {
 		});
 
 		it('delrcpt 1', function(done) {
-			ctx.aflags = SMFIF.DELRCPT;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.DELRCPT;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.delrcpt(ctx, 'rcpt', function(result) {
 				expect(result).to.equal(0);
@@ -551,8 +551,8 @@ describe('milter', function() {
 		});
 
 		it('delrcpt 2', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.delrcpt(ctx, 'rcpt', function(result) {
 				expect(result).to.equal(-1);
@@ -561,8 +561,8 @@ describe('milter', function() {
 		});
 
 		it('delrcpt 3', function(done) {
-			ctx.aflags = SMFIF.DELRCPT;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.DELRCPT;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.delrcpt(ctx, 1, function(result) {
 				expect(result).to.equal(-1);
@@ -571,8 +571,8 @@ describe('milter', function() {
 		});
 
 		it('replacebody 1', function(done) {
-			ctx.aflags = SMFIF.CHGBODY;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGBODY;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.replacebody(ctx, 'body', function(result) {
 				expect(result).to.equal(0);
@@ -583,8 +583,8 @@ describe('milter', function() {
 		});
 
 		it('replacebody 2', function(done) {
-			ctx.aflags = SMFIF.CHGBODY;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGBODY;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.replacebody(ctx, new Buffer('body'), function(result) {
 				expect(result).to.equal(0);
@@ -595,8 +595,8 @@ describe('milter', function() {
 		});
 
 		it('replacebody 3', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.replacebody(ctx, 'body', function(result) {
 				expect(result).to.equal(-1);
@@ -605,8 +605,8 @@ describe('milter', function() {
 		});
 
 		it('replacebody 4', function(done) {
-			ctx.aflags = SMFIF.CHGBODY;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.CHGBODY;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.replacebody(ctx, 1, function(result) {
 				expect(result).to.equal(-1);
@@ -632,8 +632,8 @@ describe('milter', function() {
 		});
 
 		it('quarantine 1', function(done) {
-			ctx.aflags = SMFIF.QUARANTINE;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.QUARANTINE;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.quarantine(ctx, 'reason', function(result) {
 				expect(result).to.equal(0);
@@ -644,8 +644,8 @@ describe('milter', function() {
 		});
 
 		it('quarantine 2', function(done) {
-			ctx.aflags = 0;
-			ctx.state = ST.ENDM;
+			ctx._aflags = 0;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.quarantine(ctx, 'reason', function(result) {
 				expect(result).to.equal(-1);
@@ -654,8 +654,8 @@ describe('milter', function() {
 		});
 
 		it('quarantine 3', function(done) {
-			ctx.aflags = SMFIF.QUARANTINE;
-			ctx.state = ST.ENDM;
+			ctx._aflags = SMFIF.QUARANTINE;
+			ctx._state = ST.ENDM;
 			stub.callsArgWith(2, 0);
 			milter.quarantine(ctx, 1, function(result) {
 				expect(result).to.equal(-1);
