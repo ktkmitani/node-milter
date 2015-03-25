@@ -38,7 +38,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(dispatcher, '_dispatch',function(cmd, buf, callback) {
+			var stub = sinon.stub(dispatcher, '_dispatch', function(cmd, buf, callback) {
 				expect(cmd).to.equal('O');
 				expect(buf.toString()).to.equal('abc');
 				callback();
@@ -59,7 +59,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(dispatcher, '_dispatch',function(cmd, buf, callback) {
+			var stub = sinon.stub(dispatcher, '_dispatch', function(cmd, buf, callback) {
 				expect(cmd).to.equal('O');
 				expect(buf.toString()).to.equal('abc');
 				callback();
@@ -82,7 +82,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			var dispatcher = new Dispatcher(ctx);
 
-			var stub = sinon.stub(dispatcher, '_dispatch',function(cmd, buf, callback) {
+			var stub = sinon.stub(dispatcher, '_dispatch', function(cmd, buf, callback) {
 				expect(cmd).to.equal('O');
 				expect(buf.toString()).to.equal('abc');
 				callback();
@@ -277,7 +277,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.CONN;
 			ctx._pflags = SMFIP.NR_CONN;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -295,7 +295,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.HELO;
 			ctx._pflags = SMFIP.NR_HELO;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -313,7 +313,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.MAIL;
 			ctx._pflags = SMFIP.NR_MAIL;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -331,7 +331,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.RCPT;
 			ctx._pflags = SMFIP.NR_RCPT;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -349,7 +349,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.DATA;
 			ctx._pflags = SMFIP.NR_DATA;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -367,7 +367,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.UNKN;
 			ctx._pflags = SMFIP.NR_UNKN;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -385,7 +385,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.HDRS;
 			ctx._pflags = SMFIP.NR_HDR;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -403,7 +403,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.EOHS;
 			ctx._pflags = SMFIP.NR_EOH;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
@@ -421,7 +421,7 @@ describe('Dispatcher', function() {
 			var ctx = new Context();
 			ctx._state = ST.BODY;
 			ctx._pflags = SMFIP.NR_BODY;
-			ctx._mta_pflags  = 0;
+			ctx._mta_pflags = 0;
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {

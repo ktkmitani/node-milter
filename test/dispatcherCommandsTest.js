@@ -778,7 +778,7 @@ describe('Dispatcher commands', function() {
 				_flags: 0,
 				_negotiate: function(ctx, f1, f2, f3, f4, callback) {
 					expect(f1).to.equal(0x0000003F);
-					expect(f2).to.equal(0x2000047F|0x0000FF080);
+					expect(f2).to.equal(0x2000047F | 0x0000FF080);
 					expect(f3).to.equal(0);
 					expect(f4).to.equal(0);
 					callback(SMFIS.ALL_OPTS);
@@ -842,10 +842,10 @@ describe('Dispatcher commands', function() {
 				_flags: 0,
 				_negotiate: function(ctx, f1, f2, f3, f4, callback) {
 					expect(f1).to.equal(0x000000F);
-					expect(f2).to.equal(0x2000007F|0x0000FF080);
+					expect(f2).to.equal(0x2000007F | 0x0000FF080);
 					expect(f3).to.equal(0);
 					expect(f4).to.equal(0);
-					callback(SMFIS.CONTINUE, f1, f2, f3 ,f4);
+					callback(SMFIS.CONTINUE, f1, f2, f3, f4);
 				}
 			});
 
@@ -883,10 +883,10 @@ describe('Dispatcher commands', function() {
 				_flags: 0,
 				_negotiate: function(ctx, f1, f2, f3, f4, callback) {
 					expect(f1).to.equal(0x0000003F);
-					expect(f2).to.equal(0x0000003F|0x0000FF080);
+					expect(f2).to.equal(0x0000003F | 0x0000FF080);
 					expect(f3).to.equal(0);
 					expect(f4).to.equal(0);
-					callback(SMFIS.CONTINUE, f1, f2, f3 ,f4);
+					callback(SMFIS.CONTINUE, f1, f2, f3, f4);
 				}
 			});
 
@@ -924,7 +924,7 @@ describe('Dispatcher commands', function() {
 				_flags: 0,
 				_negotiate: function(ctx, f1, f2, f3, f4, callback) {
 					expect(f1).to.equal(0x0000003F);
-					expect(f2).to.equal(0x2000047F|0x0000FF080);
+					expect(f2).to.equal(0x2000047F | 0x0000FF080);
 					f1 = 0x0000007F;
 					callback(SMFIS.CONTINUE, f1, f2, f3, f4);
 				}
@@ -950,7 +950,7 @@ describe('Dispatcher commands', function() {
 				_flags: 0,
 				_negotiate: function(ctx, f1, f2, f3, f4, callback) {
 					expect(f1).to.equal(0x0000003F);
-					expect(f2).to.equal(0x2000047F|0x0000FF080);
+					expect(f2).to.equal(0x2000047F | 0x0000FF080);
 					f2 = 0x1FF4FF;
 					callback(SMFIS.CONTINUE, f1, f2, f3, f4);
 				}

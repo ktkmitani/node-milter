@@ -13,7 +13,10 @@ var flags = 0
 	| nodemilter.SMFIF_SETSYMLIST
 	;
 
-var milter = nodemilter.createMilter({name: 'test-milter', flags: flags});
+var milter = nodemilter.createMilter({
+	name: 'test-milter',
+	flags: flags
+});
 
 milter.setCallback('negotiate', function(ctx, f1, f2, f3, f4, callback) {
 	console.log('negotiate %s %s %s %s',
@@ -41,7 +44,7 @@ milter.setCallback('envrcpt', function(ctx, argv, callback) {
 	callback(nodemilter.SMFIS_CONTINUE);
 });
 
-milter.setCallback('data', function(ctx,  callback) {
+milter.setCallback('data', function(ctx, callback) {
 	console.log('data');
 	callback(nodemilter.SMFIS_CONTINUE);
 });
@@ -146,7 +149,7 @@ milter.setCallback('eom', function(ctx, callback) {
 			});
 		},
 		function(callback) {
-			milter.progress(ctx,  function(result) {
+			milter.progress(ctx, function(result) {
 				if (result !== nodemilter.MI_SUCCESS) {
 					callback('progress error');
 					return;
@@ -156,7 +159,7 @@ milter.setCallback('eom', function(ctx, callback) {
 			});
 		},
 		function(callback) {
-			milter.quarantine(ctx,  'test', function(result) {
+			milter.quarantine(ctx, 'test', function(result) {
 				if (result !== nodemilter.MI_SUCCESS) {
 					callback('quarantine error');
 					return;

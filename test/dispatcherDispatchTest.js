@@ -7,7 +7,7 @@ var Context = require('../lib/context').Context;
 var constants = require('../lib/constants');
 var ST = constants.ST;
 var SMFIS = constants.SMFIS;
-var SMFIC =  constants.SMFIC;
+var SMFIC = constants.SMFIC;
 var SMFI_VERSION = constants.SMFI_VERSION;
 
 var Dispatcher = require('../lib/dispatcher').Dispatcher;

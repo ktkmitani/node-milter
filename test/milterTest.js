@@ -92,7 +92,7 @@ describe('milter', function() {
 		it('hoge', function() {
 			try {
 				milter.setCallback('hoge', function() {});
-			} catch(e) {
+			} catch (e) {
 				expect(e).to.be.an.instanceof(Error);
 			}
 		});
@@ -100,7 +100,7 @@ describe('milter', function() {
 		it('name is not string', function() {
 			try {
 				milter.setCallback(1, function() {});
-			} catch(e) {
+			} catch (e) {
 				expect(e).to.be.an.instanceof(TypeError);
 			}
 		});
@@ -108,7 +108,7 @@ describe('milter', function() {
 		it('callback is not function', function() {
 			try {
 				milter.setCallback('connect');
-			} catch(e) {
+			} catch (e) {
 				expect(e).to.be.an.instanceof(TypeError);
 			}
 		});
@@ -122,19 +122,25 @@ describe('milter', function() {
 		});
 
 		it('success', function() {
-			var res = milter.setpriv(ctx, {name: 'hoge'});
+			var res = milter.setpriv(ctx, {
+				name: 'hoge'
+			});
 			var data = milter.getpriv(ctx);
 			expect(res).to.equal(0);
 			expect(data.name).to.equal('hoge');
 		});
 
 		it('setpriv error', function() {
-			var res = milter.setpriv(null, {name: 'hoge'});
+			var res = milter.setpriv(null, {
+				name: 'hoge'
+			});
 			expect(res).to.equal(-1);
 		});
 
 		it('getpriv error', function() {
-			var res = milter.setpriv(null, {name: 'hoge'});
+			var res = milter.setpriv(null, {
+				name: 'hoge'
+			});
 			var data = milter.getpriv(null);
 			expect(data.name).to.equal(undefined);
 			data = milter.getpriv({});
@@ -305,7 +311,7 @@ describe('milter', function() {
 		var ctx, milter, stub;
 		beforeEach(function() {
 			ctx = {};
-			ctx._write_command = function(){};
+			ctx._write_command = function() {};
 			ctx._milter = {};
 			milter = nodemilter.createMilter();
 			stub = sinon.stub(ctx, '_write_command');
