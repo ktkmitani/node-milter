@@ -13,7 +13,7 @@ describe('Context', function() {
 	it('write_command 1', function(done) {
 		var milter = {};
 		var socket = {
-			write: function(data, encoding, callback) {
+			write: function(data, callback) {
 				expect(data).to.length(5);
 				expect(data.readUInt32BE()).to.equal(1);
 				expect(data[4]).to.equal(0x63);
@@ -30,7 +30,7 @@ describe('Context', function() {
 	it('write_command 2', function(done) {
 		var milter = {};
 		var socket = {
-			write: function(data, encoding, callback) {
+			write: function(data, callback) {
 				expect(data).to.length(9);
 				expect(data.readUInt32BE()).to.equal(5);
 				expect(data[4]).to.equal(0x4F);
@@ -53,7 +53,7 @@ describe('Context', function() {
 	it('write_command 3', function(done) {
 		var milter = {};
 		var socket = {
-			write: function(data, encoding, callback) {
+			write: function(data, callback) {
 				expect(data).to.length(5);
 				expect(data.readUInt32BE()).to.equal(1);
 				expect(data[4]).to.equal(0x4F);
@@ -83,7 +83,7 @@ describe('Context', function() {
 	it('write_command 5', function(done) {
 		var milter = {};
 		var socket = {
-			write: function(data, encoding, callback) {
+			write: function(data, callback) {
 				expect(data).to.length(9);
 				expect(data.readUInt32BE()).to.equal(5);
 				expect(data[4]).to.equal(0x79);

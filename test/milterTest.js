@@ -90,27 +90,15 @@ describe('milter', function() {
 		});
 
 		it('hoge', function() {
-			try {
-				milter.setCallback('hoge', function() {});
-			} catch (e) {
-				expect(e).to.be.an.instanceof(Error);
-			}
+			expect(milter.setCallback.bind(milter, 'hoge', function() {})).to.throw(Error);
 		});
 
 		it('name is not string', function() {
-			try {
-				milter.setCallback(1, function() {});
-			} catch (e) {
-				expect(e).to.be.an.instanceof(TypeError);
-			}
+			expect(milter.setCallback.bind(milter, 1, function() {})).to.throw(Error);
 		});
 
 		it('callback is not function', function() {
-			try {
-				milter.setCallback('connect');
-			} catch (e) {
-				expect(e).to.be.an.instanceof(TypeError);
-			}
+			expect(milter.setCallback.bind(milter, 'connect')).to.throw(TypeError);
 		});
 	});
 
