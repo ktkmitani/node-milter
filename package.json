@@ -1,6 +1,6 @@
 {
-  "name": "node-nmilter",
-  "version": "0.3.0",
+  "name": "node-milter",
+  "version": "0.1.0",
   "description": "node milter",
   "main": "index.js",
   "scripts": {
