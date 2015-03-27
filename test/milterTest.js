@@ -1,3 +1,5 @@
+var PassThrough = require('stream').PassThrough;
+
 var expect = require('chai').expect;
 var sinon = require('sinon');
 
@@ -7,6 +9,7 @@ var ST = constants.ST;
 var SMFIR = constants.SMFIR;
 var SMFIF = constants.SMFIF;
 var SMFIM = constants.SMFIM;
+var MILTER_CHUNK_SIZE = constants.MILTER_CHUNK_SIZE;
 
 var nodemilter = require('../lib/milter');
 var Milter = nodemilter.Milter;
@@ -606,6 +609,61 @@ describe('milter', function() {
 				expect(result).to.equal(-1);
 				done();
 			});
+		});
+
+		it('replacebody 5', function(done) {
+			ctx._aflags = SMFIF.CHGBODY;
+			ctx._state = ST.ENDM;
+			stub.callsArgWith(2, 0);
+
+			var buffer = new Buffer(MILTER_CHUNK_SIZE + 1);
+			buffer.fill('1');
+
+			milter.replacebody(ctx, buffer, function(result) {
+				expect(result).to.equal(0);
+				expect(stub.firstCall.args[0]).to.equal(SMFIR.REPLBODY);
+				expect(stub.callCount).to.equal(2);
+				done();
+			});
+		});
+
+		it('replacebody 6', function(done) {
+			ctx._aflags = SMFIF.CHGBODY;
+			ctx._state = ST.ENDM;
+			stub.callsArgWith(2, 0);
+
+			var passthrough = new PassThrough();
+
+			milter.replacebody(ctx, passthrough, function(result) {
+				expect(result).to.equal(0);
+				expect(stub.firstCall.args[0]).to.equal(SMFIR.REPLBODY);
+				expect(stub.firstCall.args[1].toString()).to.equal('body');
+				done();
+			});
+
+			passthrough.write('body');
+			passthrough.end();
+		});
+
+
+		it('replacebody 7', function(done) {
+			ctx._aflags = SMFIF.CHGBODY;
+			ctx._state = ST.ENDM;
+			stub.callsArgWith(2, 0);
+
+			var buffer = new Buffer(MILTER_CHUNK_SIZE + 1);
+			buffer.fill('1');
+
+			var passthrough = new PassThrough();
+
+			milter.replacebody(ctx, passthrough, function(result) {
+				expect(result).to.equal(0);
+				expect(stub.firstCall.args[0]).to.equal(SMFIR.REPLBODY);
+				done();
+			});
+
+			passthrough.write(buffer);
+			passthrough.end();
 		});
 
 		it('progress 1', function(done) {
