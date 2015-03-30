@@ -1,13 +1,15 @@
 var gulp = require('gulp');
-var connect = require('gulp-connect');
+var webserver = require('gulp-webserver');
 var istanbul = require('gulp-istanbul');
 var mocha = require('gulp-mocha');
 
-gulp.task('connect', function() {
-	return connect.server({
-		port: 8000,
-		livereload: true
-	});
+gulp.task('webserver', function() {
+	gulp.src('.')
+		.pipe(webserver({
+			port: 8000,
+			directoryListing: true,
+			livereload: true
+		}));
 });
 
 gulp.task('test', function(cb) {
