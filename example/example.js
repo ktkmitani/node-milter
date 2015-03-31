@@ -147,26 +147,6 @@ milter.setCallback('eom', function(ctx, callback) {
 
 				callback();
 			});
-		},
-		function(callback) {
-			milter.progress(ctx, function(result) {
-				if (result !== nodemilter.MI_SUCCESS) {
-					callback('progress error');
-					return;
-				}
-
-				callback();
-			});
-		},
-		function(callback) {
-			milter.quarantine(ctx, 'test', function(result) {
-				if (result !== nodemilter.MI_SUCCESS) {
-					callback('quarantine error');
-					return;
-				}
-
-				callback();
-			});
 		}
 	], function(err) {
 		if (err) {
