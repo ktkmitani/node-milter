@@ -92,6 +92,11 @@ describe('milter', function() {
 			expect(milter._negotiate).to.not.equal(undefined);
 		});
 
+		it('close', function() {
+			milter.setCallback('close', function() {});
+			expect(milter._close).to.not.equal(undefined);
+		});
+
 		it('hoge', function() {
 			expect(milter.setCallback.bind(milter, 'hoge', function() {})).to.throw(Error);
 		});

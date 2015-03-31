@@ -189,6 +189,11 @@ milter.setCallback('unknown', function(ctx, data, callback) {
 	callback(nodemilter.SMFIS_CONTINUE);
 });
 
+milter.setCallback('close', function(ctx, callback) {
+	console.log('close');
+	callback(nodemilter.SMFIS_CONTINUE);
+});
+
 milter.listen(10025, function() {
 	console.log('milter started on port 10025');
 });
