@@ -116,7 +116,7 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var data = new Buffer(4);
-			data.writeUInt32BE((1024 * 1024));
+			data.writeUInt32BE((1024 * 1024 + 1));
 			data = Buffer.concat([data, new Buffer('O')]);
 			data = Buffer.concat([data, new Buffer('abc')]);
 
