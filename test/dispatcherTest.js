@@ -281,7 +281,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -299,7 +300,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -317,7 +319,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -335,7 +338,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -353,7 +357,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -371,7 +376,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -389,7 +395,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -407,7 +414,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
@@ -425,7 +433,8 @@ describe('Dispatcher', function() {
 			var dispatcher = new Dispatcher(ctx);
 
 			var stub = sinon.stub(ctx, '_write_command', function(cmd, data, callback) {
-				expect(cmd).to.equal(SMFIC.CONTINUE);
+				expect(cmd).to.equal(SMFIR.CONTINUE);
+				callback = data;
 				callback(0);
 			});
 
