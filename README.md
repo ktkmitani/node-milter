@@ -77,19 +77,52 @@ arguments passthrough net.Server.listen
 
 |name|callback|
 |----|--------|
+|negotiate|function(ctx, f1, f2, f3, f4, callback)
 |connect|function(ctx, hostname, address, port, callback)|
 |helo|function(ctx, helohost, callback)|
 |envfrom|function(ctx, argv, callback)|
 |envrcpt|function(ctx, argv, callback)|
+|data|function(ctx, callback)|
 |header|function(ctx, field, value, callback)|
 |eoh|function(ctx, callback)|
 |body|function(ctx, data, callback)|
 |eom|function(ctx, callback)|
-|abort|function(ctx, callback)|
-|unknown|function(ctx, ata, callback)|
-|data|function(ctx, callback)|
-|negotiate|function(ctx, f1, f2, f3, f4, callback)
 |close|function(ctx, callback)|
+|abort|function(ctx, callback)|
+|unknown|function(ctx, data, callback)|
+
+##### negoticate(ctx, f1, f2, f3, f4, callback)
+##### connect(ctx, hostname, address, port, callback)
+##### helo(ctx, helohost, callback)
+##### envfrom(ctx, argv, callback)
+##### envrcpt(ctx, argv, callback)
+##### data(ctx, callback)
+##### header(ctx, field, value, callback)
+* __ctx__ Object
+* __callback__ Function
+##### eoh(ctx, callback)
+* __ctx__ Object
+* __callback__ Function
+
+##### body(ctx, data, callback)
+* __ctx__ Object
+* __callback__ Function
+
+##### eom(ctx, callback)
+* __ctx__ Object
+* __callback__ Function
+
+##### close(ctx, callback)
+* __ctx__ Object
+* __callback__ Function
+
+##### abort(ctx, callback)
+* __ctx__ Object
+* __callback__ Function
+
+##### unknown(ctx, data, callback)
+* __ctx__ Object
+* __callback__ Function
 
 ### Data Access Functions
 #### milter.getpriv(ctx)
