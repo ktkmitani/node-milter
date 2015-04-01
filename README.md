@@ -92,20 +92,52 @@ arguments passthrough net.Server.listen
 |unknown|function(ctx, data, callback)|
 
 ##### negoticate(ctx, f1, f2, f3, f4, callback)
+* __ctx__ Object
+* __f1__ Number
+* __f2__ Number
+* __f3__ Number
+* __f4__ Number
+* __callback__ Function
+
 ##### connect(ctx, hostname, address, port, callback)
+* __ctx__ Object
+* __hostname__ String
+* __address__ String
+* __port__ Number
+* __callback__ Function
+
 ##### helo(ctx, helohost, callback)
+* __ctx__ Object
+* __helohost__ String
+* __callback__ Function
+
 ##### envfrom(ctx, argv, callback)
+* __ctx__ Object
+* __argv__ Array(String)
+* __callback__ Function
+
 ##### envrcpt(ctx, argv, callback)
+* __ctx__ Object
+* __argv__ Array(String)
+* __callback__ Function
+
 ##### data(ctx, callback)
-##### header(ctx, field, value, callback)
 * __ctx__ Object
 * __callback__ Function
+
+##### header(ctx, field, value, callback)
+* __ctx__ Object
+* __field__ String
+* __value__ String
+* __callback__ Function
+ 
 ##### eoh(ctx, callback)
 * __ctx__ Object
 * __callback__ Function
 
 ##### body(ctx, data, callback)
 * __ctx__ Object
+* __data__ Buffer
 * __callback__ Function
 
 ##### eom(ctx, callback)
@@ -122,6 +154,7 @@ arguments passthrough net.Server.listen
 
 ##### unknown(ctx, data, callback)
 * __ctx__ Object
+* __data__ Buffer
 * __callback__ Function
 
 ### Data Access Functions
